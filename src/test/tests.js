@@ -86,62 +86,11 @@ describe('User tests', () => {
     done();
   });
 
-  it('Should not accept incorrect firstname input format', (done) => {
-    const user = {
-      firstname: 123,
-      lastname: 'Muhire',
-      email: 'muhirejosue@gmail.com',
-      password: 'example12',
-      address: 'kigali-rwanda',
-      bio: 'DevOp manager',
-      occupation: 'software engineer',
-      expertise: 'backend engineer',
-      status: 'user',
-    };
-
-    chai.request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((req, res) => {
-        res.body.should.be.an('object');
-        res.body.status.should.be.equal(400);
-        res.body.error.should.be.a('string');
-      });
-
-    done();
-  });
-
-
   it('Should not accept incorrect email input format', (done) => {
     const user = {
       firstname: 'Josue',
       lastname: 'Muhire',
       email: 123,
-      password: 'example12',
-      address: 'kigali-rwanda',
-      bio: 'DevOp manager',
-      occupation: 'software engineer',
-      expertise: 'backend engineer',
-      status: 'user',
-    };
-
-    chai.request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((req, res) => {
-        res.body.should.be.an('object');
-        res.body.status.should.be.equal(400);
-        res.body.error.should.be.a('string');
-      });
-
-    done();
-  });
-
-  it('Should not accept incorrect lastname input format', (done) => {
-    const user = {
-      firstname: 'Josue',
-      lastname: 1234,
-      email: 'muhirejosue@gmail.com',
       password: 'example12',
       address: 'kigali-rwanda',
       bio: 'DevOp manager',
