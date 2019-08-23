@@ -1,0 +1,8 @@
+node_modules
+mentorspace-app
+.nyc_output
+coverage
+build
+npm-debug.log
+.env
+.DS_Store
