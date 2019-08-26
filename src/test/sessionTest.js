@@ -9,7 +9,7 @@ chai.should();
 describe('Sessions tests', () => {
   it('should allow users to create session request', (done) => {
     const session = {
-      mentorId: 7,
+      mentorId: 6,
       questions: 'Hello world',
     };
 
@@ -26,7 +26,7 @@ describe('Sessions tests', () => {
 
   it('should allow not other type of users to create session', (done) => {
     const session = {
-      mentorId: 2,
+      mentorId: 6,
       questions: 'Hello world',
     };
 
@@ -42,8 +42,26 @@ describe('Sessions tests', () => {
 
   it('should not allow to create session if all fields are not provided', (done) => {
     const session = {
-      mentorId: 2,
+      mentorId: 6,
 
+    };
+
+    chai.request(server)
+      .post('/api/v1/auth/sessions')
+      .send(session)
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoib2x1YnVubWlAeWF3LmNvbSIsImZpcnN0bmFtZSI6Ik9sdWJ1bm1pIiwibGFzdG5hbWUiOiJZYXciLCJhZGRyZXNzIjoiR2lzZW55aSIsInN0YXR1cyI6InVzZXIiLCJpYXQiOjE1NjYyOTk4MTJ9.HM1o8BFFMkDwEukHULcEI7Ola1sPht5g9mp56Cnnsts')
+      .end((err, res) => {
+        res.body.should.be.an('object');
+        res.body.status.should.be.equal(403);
+      });
+    done();
+  });
+
+
+  it('should not allow to create session with non-mentors', (done) => {
+    const session = {
+      mentorId: 2,
+      questions: 'Hello world',
     };
 
     chai.request(server)
