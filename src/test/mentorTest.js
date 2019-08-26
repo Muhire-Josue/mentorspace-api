@@ -58,4 +58,45 @@ describe('Mentor tests', () => {
       });
     done();
   });
+  it('should let mentor accept session request', (done) => {
+    chai.request(server)
+      .patch('/api/v1/auth/sessions/1/accept')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJhc2hhQGthaW4uY29tIiwiZmlyc3RuYW1lIjoiQXNoYSIsImxhc3RuYW1lIjoiS2FpbiIsImFkZHJlc3MiOiJuYWlyYm8iLCJzdGF0dXMiOiJtZW50b3IiLCJpYXQiOjE1NjYzMDUzODl9.IhPdQj_x-mID69lQSYM6i_d0ox43wNhu6XvnP1k9r1w')
+      .end((error, res) => {
+        res.body.should.be.an('object');
+      });
+    done();
+  });
+
+  it('should not allow mentor accept other session request', (done) => {
+    chai.request(server)
+      .patch('/api/v1/auth/sessions/2/accept')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJhc2hhQGthaW4uY29tIiwiZmlyc3RuYW1lIjoiQXNoYSIsImxhc3RuYW1lIjoiS2FpbiIsImFkZHJlc3MiOiJuYWlyYm8iLCJzdGF0dXMiOiJtZW50b3IiLCJpYXQiOjE1NjYzMDUzODl9.IhPdQj_x-mID69lQSYM6i_d0ox43wNhu6XvnP1k9r1w')
+      .end((error, res) => {
+        res.body.status.should.be.equal(401);
+        res.body.should.be.an('object');
+      });
+    done();
+  });
+
+  it('should not allow mentor accept non-existing session request', (done) => {
+    chai.request(server)
+      .patch('/api/v1/auth/sessions/5/accept')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJhc2hhQGthaW4uY29tIiwiZmlyc3RuYW1lIjoiQXNoYSIsImxhc3RuYW1lIjoiS2FpbiIsImFkZHJlc3MiOiJuYWlyYm8iLCJzdGF0dXMiOiJtZW50b3IiLCJpYXQiOjE1NjYzMDUzODl9.IhPdQj_x-mID69lQSYM6i_d0ox43wNhu6XvnP1k9r1w')
+      .end((error, res) => {
+        res.body.should.be.an('object');
+      });
+    done();
+  });
+
+  it('should not let other users to accept session request', (done) => {
+    chai.request(server)
+      .patch('/api/v1/auth/sessions/1/accept')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoib2x1YnVubWlAeWF3LmNvbSIsImZpcnN0bmFtZSI6Ik9sdWJ1bm1pIiwibGFzdG5hbWUiOiJZYXciLCJhZGRyZXNzIjoiR2lzZW55aSIsInN0YXR1cyI6InVzZXIiLCJpYXQiOjE1NjYzMDgyNzZ9.oyZVJqLCQqwuEWGtOYXNfMwF0IbcnESN_v3y6dBK5fA')
+      .end((error, res) => {
+        res.body.should.be.an('object');
+        res.body.status.should.be.equal(400);
+      });
+    done();
+  });
 });
