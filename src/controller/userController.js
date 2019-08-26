@@ -1,9 +1,12 @@
+/* eslint-disable max-len */
 /* eslint-disable consistent-return */
 import jwt from 'jsonwebtoken';
 import hash from 'bcrypt-nodejs';
 import dotenv from 'dotenv';
 import userSchema from '../helper/userValidation';
+import sessionSchema from '../helper/sessionValidation';
 import User from '../model/user';
+import Session from '../model/session';
 
 dotenv.config();
 
@@ -24,7 +27,7 @@ class userController {
       // eslint-disable-next-line max-len
       token, id: idNo, email, firstname, lastname, password: hashpsw, bio, address, occupation, expertise, status,
     });
-      // eslint-disable-next-line max-len
+    // eslint-disable-next-line max-len
     if (newUser.error) { return res.status(400).json({ status: 400, error: newUser.error.details[0].message }); }
     const DuplicateUser = User.find(u => u.email === req.body.email);
     if (DuplicateUser) {
@@ -44,7 +47,6 @@ class userController {
     );
   }
 
-  // Sign In
   // SignIn
   static signIn(req, res) {
     const {
@@ -79,6 +81,45 @@ class userController {
       },
     });
   }
+
+  // Create mentorship session
+  static createSession(req, res) {
+    if (req.user.status === 'user') {
+      const { questions, mentorId } = req.body;
+      const newSession = {};
+      newSession.sessionId = Session.length + 1;
+      newSession.mentorId = mentorId;
+      newSession.menteeId = req.user.id;
+      newSession.questions = questions;
+      newSession.menteeEmail = req.user.email;
+      newSession.status = 'pending';
+
+      const {
+        sessionId, menteeId, menteeEmail, status,
+      } = newSession;
+      const session = sessionSchema.validate({
+        sessionId,
+        mentorId,
+        menteeId,
+        menteeEmail,
+        questions,
+        status,
+      });
+
+      if (session.error) { return res.status(400).json({ status: 400, error: session.error.details[0].message }); }
+      Session.push(newSession);
+      res.status(201).json({
+        data: newSession,
+      });
+    } else {
+      res.status(401).json({
+        status: 401,
+        error: 'Unauthorized access',
+        auth: req.user.status,
+      });
+    }
+  }
 }
+
 
 export default userController;
