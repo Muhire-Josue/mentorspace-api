@@ -86,31 +86,41 @@ class userController {
   static createSession(req, res) {
     if (req.user.status === 'user') {
       const { questions, mentorId } = req.body;
-      const newSession = {};
-      newSession.sessionId = Session.length + 1;
-      newSession.mentorId = mentorId;
-      newSession.menteeId = req.user.id;
-      newSession.questions = questions;
-      newSession.menteeEmail = req.user.email;
-      newSession.status = 'pending';
+      // eslint-disable-next-line radix
+      const mentor = User.find(u => u.id === parseInt(mentorId));
+      if (mentor.status === 'mentor') {
+        const newSession = {};
+        newSession.sessionId = Session.length + 1;
+        newSession.mentorId = mentorId;
+        newSession.menteeId = req.user.id;
+        newSession.questions = questions;
+        newSession.menteeEmail = req.user.email;
+        newSession.status = 'pending';
 
-      const {
-        sessionId, menteeId, menteeEmail, status,
-      } = newSession;
-      const session = sessionSchema.validate({
-        sessionId,
-        mentorId,
-        menteeId,
-        menteeEmail,
-        questions,
-        status,
-      });
+        const {
+          sessionId, menteeId, menteeEmail, status,
+        } = newSession;
+        const session = sessionSchema.validate({
+          sessionId,
+          mentorId,
+          menteeId,
+          menteeEmail,
+          questions,
+          status,
+        });
 
-      if (session.error) { return res.status(400).json({ status: 400, error: session.error.details[0].message }); }
-      Session.push(newSession);
-      res.status(201).json({
-        data: newSession,
-      });
+        if (session.error) { return res.status(403).json({ status: 403, error: session.error.details[0].message }); }
+        Session.push(newSession);
+        res.status(201).json({
+          data: newSession,
+        });
+      } else {
+        res.status(400).json({
+          status: 400,
+          error: 'Bad request',
+          auth: req.user.status,
+        });
+      }
     } else {
       res.status(401).json({
         status: 401,
