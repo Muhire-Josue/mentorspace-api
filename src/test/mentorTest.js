@@ -99,4 +99,45 @@ describe('Mentor tests', () => {
       });
     done();
   });
+
+  it('should let mentor reject session request', (done) => {
+    chai.request(server)
+      .patch('/api/v1/auth/sessions/1/reject')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJhc2hhQGthaW4uY29tIiwiZmlyc3RuYW1lIjoiQXNoYSIsImxhc3RuYW1lIjoiS2FpbiIsImFkZHJlc3MiOiJuYWlyYm8iLCJzdGF0dXMiOiJtZW50b3IiLCJpYXQiOjE1NjYzMDg2MjJ9.KRvmu1PIEWBY81YjSQeeXeo4UKRNq9g9DtLVASXrb7Q')
+      .end((error, res) => {
+        res.body.should.be.an('object');
+      });
+    done();
+  });
+
+  it('should not let other users to accept session request', (done) => {
+    chai.request(server)
+      .patch('/api/v1/auth/sessions/1/reject')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoib2x1YnVubWlAeWF3LmNvbSIsImZpcnN0bmFtZSI6Ik9sdWJ1bm1pIiwibGFzdG5hbWUiOiJZYXciLCJhZGRyZXNzIjoiR2lzZW55aSIsInN0YXR1cyI6InVzZXIiLCJpYXQiOjE1NjYzMDk3NzZ9.IpLPN88NOYqKKm0XvIqeIANOQYdweAtBl__J6TDzCLQ')
+      .end((error, res) => {
+        res.body.should.be.an('object');
+      });
+    done();
+  });
+
+  it('should not let mentor reject  others session request', (done) => {
+    chai.request(server)
+      .patch('/api/v1/auth/sessions/2/reject')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJhc2hhQGthaW4uY29tIiwiZmlyc3RuYW1lIjoiQXNoYSIsImxhc3RuYW1lIjoiS2FpbiIsImFkZHJlc3MiOiJuYWlyYm8iLCJzdGF0dXMiOiJtZW50b3IiLCJpYXQiOjE1NjYzMDg2MjJ9.KRvmu1PIEWBY81YjSQeeXeo4UKRNq9g9DtLVASXrb7Q')
+      .end((error, res) => {
+        res.body.should.be.an('object');
+        res.body.status.should.be.equal(401);
+      });
+    done();
+  });
+
+  it('should not let mentor reject  non-existing session request', (done) => {
+    chai.request(server)
+      .patch('/api/v1/auth/sessions/5/reject')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJhc2hhQGthaW4uY29tIiwiZmlyc3RuYW1lIjoiQXNoYSIsImxhc3RuYW1lIjoiS2FpbiIsImFkZHJlc3MiOiJuYWlyYm8iLCJzdGF0dXMiOiJtZW50b3IiLCJpYXQiOjE1NjYzMDg2MjJ9.KRvmu1PIEWBY81YjSQeeXeo4UKRNq9g9DtLVASXrb7Q')
+      .end((error, res) => {
+        res.body.should.be.an('object');
+      });
+    done();
+  });
 });
