@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 chai.should();
 
 
-// User
+// Sign Up
 // eslint-disable-next-line no-undef
 describe('User tests', () => {
   it('should be signup', (done) => {
@@ -86,62 +86,11 @@ describe('User tests', () => {
     done();
   });
 
-  it('Should not accept incorrect firstname input format', (done) => {
-    const user = {
-      firstname: 123,
-      lastname: 'Muhire',
-      email: 'muhirejosue@gmail.com',
-      password: 'example12',
-      address: 'kigali-rwanda',
-      bio: 'DevOp manager',
-      occupation: 'software engineer',
-      expertise: 'backend engineer',
-      status: 'user',
-    };
-
-    chai.request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((req, res) => {
-        res.body.should.be.an('object');
-        res.body.status.should.be.equal(400);
-        res.body.error.should.be.a('string');
-      });
-
-    done();
-  });
-
-
   it('Should not accept incorrect email input format', (done) => {
     const user = {
       firstname: 'Josue',
       lastname: 'Muhire',
       email: 123,
-      password: 'example12',
-      address: 'kigali-rwanda',
-      bio: 'DevOp manager',
-      occupation: 'software engineer',
-      expertise: 'backend engineer',
-      status: 'user',
-    };
-
-    chai.request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((req, res) => {
-        res.body.should.be.an('object');
-        res.body.status.should.be.equal(400);
-        res.body.error.should.be.a('string');
-      });
-
-    done();
-  });
-
-  it('Should not accept incorrect lastname input format', (done) => {
-    const user = {
-      firstname: 'Josue',
-      lastname: 1234,
-      email: 'muhirejosue@gmail.com',
       password: 'example12',
       address: 'kigali-rwanda',
       bio: 'DevOp manager',
@@ -185,6 +134,69 @@ describe('User tests', () => {
         res.body.should.be.an('object');
         res.body.status.should.be.equal(401);
         res.body.error.should.be.a('string');
+      });
+    done();
+  });
+  // Sign In
+  it('Should be login', (done) => {
+    const user = {
+      email: 'muhirejosue09@gmail.com',
+      password: 'user1',
+    };
+
+    chai.request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((req, res) => {
+        res.body.status.should.be.equal(200);
+        res.body.should.be.an('object');
+      });
+    done();
+  });
+
+  it('Should not SignIn non-existing email', (done) => {
+    const user = {
+      email: 'muhirejosue@gmail.com',
+      password: 'user1',
+    };
+    chai.request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((req, res) => {
+        res.body.status.should.be.equal(404);
+      });
+    done();
+  });
+
+
+  it('should not be able to signin when not signed up', (done) => {
+    const user = {
+      email: 'a@gmail.com',
+      password: 'bertin123',
+    };
+    chai.request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((err, res) => {
+        res.body.status.should.be.equal(404);
+        res.body.should.be.an('object');
+        res.body.error.should.be.equal('user not found');
+      });
+    done();
+  });
+
+  it('should not be able to signin when passwords are not matching', (done) => {
+    const user = {
+      email: 'muhirejosue09@gmail.com',
+      password: 'trash',
+    };
+    chai.request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((err, res) => {
+        res.body.status.should.be.equal(400);
+        res.body.should.be.an('object');
+        res.body.error.should.be.equal('password not matching');
       });
     done();
   });
