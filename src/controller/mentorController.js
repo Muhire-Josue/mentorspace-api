@@ -79,6 +79,37 @@ class mentorController {
       });
     }
   }
+
+  // Reject session
+  static rejectSession(req, res) {
+    if (req.user.status === 'mentor') {
+      const id = req.params.sessionId;
+      const session = Session.find(s => s.sessionId === parseInt(id));
+      if (session) {
+        if (req.user.id === session.mentorId) {
+          session.status = 'rejected';
+          res.status(200).json({
+            data: session,
+          });
+        } else {
+          res.status(401).json({
+            status: 401,
+            error: 'Unauthorized operation',
+          });
+        }
+      } else {
+        res.status(404).json({
+          error: 404,
+          message: 'User not found',
+        });
+      }
+    } else {
+      res.status(401).json({
+        status: 401,
+        error: 'Unauthorized access',
+      });
+    }
+  }
 }
 
 export default mentorController;

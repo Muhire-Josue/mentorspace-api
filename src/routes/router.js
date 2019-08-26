@@ -20,5 +20,7 @@ router.patch('/api/v1/auth/user/:userId', auth, adminController.userToMentor);
 router.post('/api/v1/auth/sessions', auth, userController.createSession);
 // Accept session
 router.patch('/api/v1/auth/sessions/:sessionId/accept', auth, mentorController.acceptSession);
+// Reject session
+router.patch('/api/v1/auth/sessions/:sessionId/reject', auth, mentorController.rejectSession);
 
 export default router;
