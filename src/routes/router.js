@@ -11,6 +11,8 @@ router.post('/api/v1/auth/signup', userController.signUp);
 router.post('/api/v1/auth/signin', userController.signIn);
 // Get all mentors
 router.get('/api/v1/auth/mentors', auth, mentorController.all);
+// Get a mentor
+router.get('/api/v1/auth/mentors/:id', auth, mentorController.findMentorById);
 // Create session
 router.post('/api/v1/auth/sessions', auth, userController.createSession);
 
