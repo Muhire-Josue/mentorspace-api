@@ -3,6 +3,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server';
+import db from '../model';
 
 chai.use(chaiHttp);
 chai.should();
@@ -11,6 +12,15 @@ chai.should();
 // Sign Up
 // eslint-disable-next-line no-undef
 describe('User tests', () => {
+  // clear users table
+  before(async () => {
+    try {
+      await db.query('TRUNCATE users CASCADE; ALTER SEQUENCE users_id_seq RESTART WITH 1;');
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
   it('should be signup', (done) => {
     const user = {
       firstname: 'Olubunmi',

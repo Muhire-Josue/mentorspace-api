@@ -6,45 +6,60 @@ import dotenv from 'dotenv';
 import userSchema from '../helper/userValidation';
 import sessionSchema from '../helper/sessionValidation';
 import User from '../model/user';
+import db from '../model';
 import Session from '../model/session';
 
 dotenv.config();
 
 class userController {
   // SignUp
-  static signUp(req, res) {
+  static async signUp(req, res) {
     const {
       firstname, lastname, email, password, address, bio, occupation, expertise, status,
     } = req.body;
 
-
-    const idNo = User.length + 1;
-    const hashpsw = hash.hashSync(password);
-    const token = jwt.sign({
-      id: idNo, email, firstname, lastname, address, status,
-    }, process.env.API_SERCRET_KEY);
     const newUser = userSchema.validate({
       // eslint-disable-next-line max-len
-      token, id: idNo, email, firstname, lastname, password: hashpsw, bio, address, occupation, expertise, status,
+      email, firstname, lastname, password, bio, address, occupation, expertise, status,
     });
     // eslint-disable-next-line max-len
     if (newUser.error) { return res.status(400).json({ status: 400, error: newUser.error.details[0].message }); }
-    const DuplicateUser = User.find(u => u.email === req.body.email);
-    if (DuplicateUser) {
-      res.status(401).json({
-        status: 401,
-        error: 'Email already exist',
-      });
+
+    const text = `INSERT INTO
+    users(firstname, lastname, email, password, address, bio, occupation, expertise, status)
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    returning id, firstname, lastname, email, password, address, bio, occupation, expertise, status, "createdDate"`;
+
+    const values = [
+      firstname, lastname, email, hash.hashSync(password), address, bio, occupation, expertise, status,
+    ];
+
+    try {
+      const checkUser = await db.query('SELECT * FROM users WHERE email=$1', [email]);
+      if (checkUser.rows.length > 0) {
+        return res.status(401).json({
+          status: 401,
+          error: 'Email already exist',
+        });
+      }
+
+      const { rows } = await db.query(text, values);
+
+      const token = jwt.sign(rows[0], process.env.API_SERCRET_KEY);
+
+      return res.status(201).json(
+        {
+          status: 201,
+          message: 'User created successfully',
+          token,
+          data: rows[0],
+        },
+      );
+
+    } catch (error) {
+      return res.status(500).json({ error })
     }
-    User.push(newUser.value);
-    res.status(201).json(
-      {
-        status: 201,
-        message: 'User created successfully',
-        token,
-        data: newUser.value,
-      },
-    );
+
   }
 
   // SignIn
@@ -83,42 +98,48 @@ class userController {
   }
 
   // Create mentorship session
-  static createSession(req, res) {
+  static async createSession(req, res) {
     if (req.user.status === 'user') {
       const { questions, mentorId } = req.body;
       // eslint-disable-next-line radix
-      const mentor = User.find(u => u.id === parseInt(mentorId));
-      if (mentor.status === 'mentor') {
-        const newSession = {};
-        newSession.sessionId = Session.length + 1;
-        newSession.mentorId = mentorId;
-        newSession.menteeId = req.user.id;
-        newSession.questions = questions;
-        newSession.menteeEmail = req.user.email;
-        newSession.status = 'pending';
-
-        const {
-          sessionId, menteeId, menteeEmail, status,
-        } = newSession;
-        const session = sessionSchema.validate({
-          sessionId,
-          mentorId,
-          menteeId,
-          menteeEmail,
-          questions,
-          status,
+      // const mentor = User.find(u => u.id === parseInt(mentorId));
+      const mentor = await db.query('SELECT * FROM users WHERE id=$1', [mentorId]);
+      if (mentor.rows.length < 1) {
+        return res.status(404).json({
+          status: 404,
+          error: 'User doesnt already exist',
         });
+      }
+      if (mentor.rows[0].status === 'mentor') {
+        const newSession = {
+          mentorId: mentorId,
+          menteeId: req.user.id,
+          questions: questions,
+          menteeEmail: req.user.email,
+          status: 'pending'
+        };
+        console.log(req.user);
+        
+
+        const session = sessionSchema.validate(newSession);
 
         if (session.error) { return res.status(403).json({ status: 403, error: session.error.details[0].message }); }
-        Session.push(newSession);
+        // Session.push(newSession);
+
+        const text = `INSERT INTO
+                      sessions("mentorId", "menteeId", questions, menteeEmail, status)
+                      VALUES($1, $2, $3, $4, $5)
+                      returning *`;
+
+        const values = [newSession.mentorId, newSession.menteeId, newSession.questions, newSession.menteeEmail, newSession.status];
+        const { rows } = await db.query(text, values);
         res.status(201).json({
-          data: newSession,
+          data: rows[0]
         });
       } else {
         res.status(400).json({
           status: 400,
           error: 'Bad request',
-          auth: req.user.status,
         });
       }
     } else {
