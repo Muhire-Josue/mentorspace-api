@@ -2,7 +2,25 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import hash from 'bcrypt-nodejs';
 import server from '../../server';
+<<<<<<< HEAD:server/test/userTest.test.js
+import user02 from '../helper/testObj/user2';
+import user03 from '../helper/testObj/user3';
+import user04 from '../helper/testObj/user4';
+import user06 from '../helper/testObj/user6';
+import user07 from '../helper/testObj/user7';
+import user08 from '../helper/testObj/user8';
+import user09 from '../helper/testObj/user9';
+import user0 from '../helper/testObj/user0';
+import newUser from '../helper/testObj/newUser';
+import user from '../helper/testObj/user';
+import newMentor from '../helper/testObj/newMentor';
+import newAdmin from '../helper/testObj/newAdmin';
+import newSession from '../helper/testObj/newSession';
+import User from '../model/user';
+import Session from '../model/session';
+=======
 import db from '../model';
+>>>>>>> set up database:src/tests/user.test.js
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -10,6 +28,18 @@ chai.should();
 
 // Sign Up
 describe('User tests', () => {
+<<<<<<< HEAD:server/test/userTest.test.js
+  before( () => {
+    let hashedPassword = hash.hashSync(newUser.password);
+    newUser.password = hashedPassword;
+    User.push(newUser);  
+    User.push(user);  
+    User.push(newMentor);
+    User.push(newAdmin);
+    Session.push(newSession)
+    
+  });
+=======
   // clear users table
   before(async () => {
     try {
@@ -19,6 +49,7 @@ describe('User tests', () => {
     }
   });
 
+>>>>>>> set up database:src/tests/user.test.js
   it('should be signup', (done) => {
     const user = user0;
     chai.request(server)
