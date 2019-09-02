@@ -10,9 +10,11 @@
     <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/shared.css">
 </head>
 
 <body>
+    <div class="form-gb"></div>
     <div class="backdrop"></div>
     <header class="main-header">
         <div>
@@ -38,23 +40,29 @@
     <nav class="mobile-nav">
         <ul class="mobile-nav__items">
             <li class="mobile-nav__item">
-                <a href="signin.html">SignIn</a>
+                <a href="signup.html">SignUp</a>
         </ul>
     </nav>
     <main class="signup-page">
-        <h1 class="signup-title">Awesome! Let's dive right in!</h1>
-        <form action="#" class="signup-form">
+        <div class="bg-img">
+            <form action="" class="container">
+                <h1 class="form-title">SignUp</h1>
 
-            <label for="first-name">First name</label>
-            <input type="text" id="first-name" required>
-            <label for="last-name">Last name</label>
-            <input type="text" id="last-name" required>
-            <label for="email">E-Mail</label>
-            <input type="email" id="email" required>
-            <label for="password">Password</label>
-            <input type="password" id="password" required>
-            <input type="submit" value="Sign Up" class="button" />
-        </form>
+                <label for="firstname" class="form-title"><b>Firstname</b></label>
+                <input type="text" placeholder="Enter first name" name="first name" required>
+                <label for="lastname" class="form-title"><b>lastname name</b></label>
+                <input type="text" placeholder="Enter last name" name="last name" required>
+                <label for="email" class="form-title"><b>Email</b></label>
+                <input type="text" placeholder="Enter Email" name="email" required>
+                <label for="psw" class="form-title"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+                <label for="address" class="form-title"><b>Address</b></label>
+                <input type="text" placeholder="Enter Address" name="address" required>
+
+
+                <a href="homepage.html" class="button">SignIn</a>
+            </form>
+        </div>
     </main>
     <footer class="main-footer">
         <nav>
@@ -68,7 +76,7 @@
             </ul>
         </nav>
     </footer>
-    <script src="css/style.css"></script>
+    <script src="js/shared.js"></script>
 </body>
 
 </html>
