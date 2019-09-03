@@ -12,7 +12,8 @@ body, html {
       url("../images/mentor.jpg") center/cover no-repeat border-box,
       #204969;
     width: 100vw;
-    height: 90vh;
+    height: 100vh;
+    margin-bottom: 0%;
     /* border: 5px dashed red; */
     position: relative;
   
@@ -31,11 +32,11 @@ body, html {
     position: absolute;
     right: 0;
     margin: 20px;
-    margin-top: 2rem;
+    margin-top: 2vh;
     max-width: 300px;
     padding: 16px;
     background-color: white;
-    bottom: 5%;
+    bottom: 12%;
     left: 3%;
   }
   
