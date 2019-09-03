@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/shared.css">
 </head>
 
 <body>
@@ -50,7 +51,7 @@
                     <a href="mentors.html">Mentors</a>
                 </li>
                 <li class="main-nav__item">
-                    <a href="signin.html">Signout</a>
+                    <a href="signin.html">SignIn</a>
                 </li>
             </ul>
         </nav>
@@ -78,7 +79,7 @@
                     <th>Firstname</th>
                     <th>Lastname</th>
                     <th>Address</th>
-                    <th>Action</th>
+                    <th>Accept/Reject</th>
                 </tr>
             </thead>
             <tbody>
@@ -88,13 +89,11 @@
                     <td>lonzo</td>
                     <td>Guan</td>
                     <td>
-                        <div>
-                            <button type="submit" class="buttonz"
-                                style="background-color: rgb(3, 88, 36);">Accept</button>
-                        </div>
-                        <div>
-                            <button type="submit" class="buttonz" style="background-color: red;">Deny</button>
-                        </div>
+                        <!-- Rounded switch -->
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
                     </td>
                 </tr>
                 <tr class="active-row">
@@ -103,13 +102,11 @@
                     <td>Mohamed</td>
                     <td>Cairo</td>
                     <td>
-                        <div>
-                            <button type="submit" class="buttonz"
-                                style="background-color: rgb(3, 88, 36);">Accept</button>
-                        </div>
-                        <div>
-                            <button type="submit" class="buttonz" style="background-color: red;">Deny</button>
-                        </div>
+                        <!-- Rounded switch -->
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
                     </td>
                 </tr>
                 <tr>
@@ -118,12 +115,11 @@
                     <td>Ryan</td>
                     <td>Washington</td>
                     <td>
-                        <div>
-                            <button type="submit" class="buttonz" style="background-color: rgb(3, 88, 36);">Accept</button>
-                        </div>
-                        <div>
-                            <button type="submit" class="buttonz" style="background-color: red;">Deny</button>
-                        </div>
+                        <!-- Rounded switch -->
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
                     </td>
                 </tr>
             </tbody>
