@@ -32,11 +32,11 @@ body, html {
     position: absolute;
     right: 0;
     margin: 20px;
-    margin-top: 2vh;
+    margin-top: 2rem;
     max-width: 300px;
     padding: 16px;
     background-color: white;
-    bottom: 12%;
+    bottom: 25%;
     left: 3%;
   }
   
