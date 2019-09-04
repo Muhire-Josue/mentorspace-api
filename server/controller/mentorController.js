@@ -9,9 +9,10 @@ class mentorController {
   static all(req, res) {
     const mentors = Mentor.filter(m => m.status === 'mentor');
     if (req.user.status === 'user' || req.user.status === 'admin') {
-      const data = sucess('No message', 200, mentors);
+      const data = sucess('All mentors', 200, mentors);
       res.status(data.status).json({
         status: data.status,
+        message: data.message,
         data: data.data,
       });
     } else {
@@ -29,16 +30,17 @@ class mentorController {
     if (req.user.status === 'user') {
       const mentor = mentors.find(m => m.id === parseInt(req.params.id));
       if (mentor) {
-        const data = sucess('No message', 200, mentor);
+        const data = sucess('Mentor profile', 200, mentor);
         res.status(data.status).json({
           status: data.status,
+          message: data.message,
           data: data.data,
         });
       } else {
         const data = failure('Mentor not found', 404);
         res.status(404).json({
           status: 404,
-          error: data.data,
+          error: data.message,
 
         });
       }
@@ -59,8 +61,10 @@ class mentorController {
       if (session) {
         if (req.user.id === session.mentorId) {
           session.status = 'accepted';
-          const data = sucess('No message', 200, session);
+          const data = sucess('Session accepted', 200, session);
           res.status(data.status).json({
+            status: data.status,
+            message: data.message,
             data: data.data,
           });
         } else {
@@ -71,7 +75,7 @@ class mentorController {
           });
         }
       } else {
-        const data = failure('user not found', 404);
+        const data = failure('session not found', 404);
         res.status(data.status).json({
           status: data.status,
           error: data.message,
@@ -94,8 +98,10 @@ class mentorController {
       if (session) {
         if (req.user.id === session.mentorId) {
           session.status = 'rejected';
-          const data = sucess('No message', 200, session);
+          const data = sucess('Session rejected', 200, session);
           res.status(data.status).json({
+            status: 200,
+            message: data.message,
             data: data.data,
           });
         } else {
@@ -106,7 +112,7 @@ class mentorController {
           });
         }
       } else {
-        const data = failure('user not found', 404);
+        const data = failure('session not found', 404);
         res.status(data.status).json({
           status: data.status,
           error: data.message,

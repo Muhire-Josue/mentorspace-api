@@ -11,7 +11,7 @@ class adminController {
         const data = sucess('User account changed to mentor', 200, User[userIndex]);
         res.status(data.status).json({
           status: data.status,
-          message: data.data,
+          message: data.message,
           data: User[userIndex],
         });
       } else {

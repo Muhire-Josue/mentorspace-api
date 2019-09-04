@@ -5,6 +5,7 @@ import session01 from '../helper/testObj/session1';
 import session02 from '../helper/testObj/session2';
 import session03 from '../helper/testObj/session3';
 import session04 from '../helper/testObj/session04';
+const { expect } = chai;
 
 chai.use(chaiHttp);
 chai.should();
@@ -17,7 +18,10 @@ describe('Sessions tests', () => {
       .send(session)
       .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoib2x1YnVubWlAeWF3LmNvbSIsImZpcnN0bmFtZSI6Ik9sdWJ1bm1pIiwibGFzdG5hbWUiOiJZYXciLCJhZGRyZXNzIjoiR2lzZW55aSIsInN0YXR1cyI6InVzZXIiLCJpYXQiOjE1NjYzMDY4Njh9.Pp9_u4M-n-hUuPktt9u6cjuZfYoUWHDlkNaQq-xkoqk')
       .end((err, res) => {
+        res.body.status.should.be.equal(201);
         res.body.should.be.an('object');
+        expect(res.body.message).to.equal('Session created successfully');
+
       });
     done();
   });
@@ -32,6 +36,7 @@ describe('Sessions tests', () => {
       .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoib2x1YnVubWlAeWF3LmNvbSIsImZpcnN0bmFtZSI6Ik9sdWJ1bm1pIiwibGFzdG5hbWUiOiJZYXciLCJhZGRyZXNzIjoiR2lzZW55aSIsInN0YXR1cyI6Im1lbnRvciIsImlhdCI6MTU2NjMwMTc0Nn0.QV1zSWcoy7p1RTDjDF-lF2_xNiE-STPncttcosGi3wQ')
       .end((err, res) => {
         res.body.status.should.be.equal(401);
+        expect(res.body.error).to.equal('Unauthorized access');
       });
     done();
   });
@@ -61,6 +66,7 @@ describe('Sessions tests', () => {
       .end((err, res) => {
         res.body.should.be.an('object');
         res.body.status.should.be.equal(400);
+        expect(res.body.error).to.equal('Bad request');
       });
     done();
   });
