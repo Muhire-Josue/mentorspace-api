@@ -1,15 +1,16 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server';
+import session01 from '../helper/testObj/session1';
+import session02 from '../helper/testObj/session2';
+import session03 from '../helper/testObj/session3';
+import session04 from '../helper/testObj/session04';
 
 chai.use(chaiHttp);
 chai.should();
 describe('Sessions tests', () => {
   it('should allow users to create session request', (done) => {
-    const session = {
-      mentorId: 6,
-      questions: 'Hello world',
-    };
+    const session = session01;
 
     chai.request(server)
       .post('/api/v1/auth/sessions')
@@ -23,10 +24,7 @@ describe('Sessions tests', () => {
 
 
   it('should allow not other type of users to create session', (done) => {
-    const session = {
-      mentorId: 6,
-      questions: 'Hello world',
-    };
+    const session = session02;
 
     chai.request(server)
       .post('/api/v1/auth/sessions')
@@ -39,10 +37,7 @@ describe('Sessions tests', () => {
   });
 
   it('should not allow to create session if all fields are not provided', (done) => {
-    const session = {
-      mentorId: 6,
-
-    };
+    const session = session03;
 
     chai.request(server)
       .post('/api/v1/auth/sessions')
@@ -57,10 +52,7 @@ describe('Sessions tests', () => {
 
 
   it('should not allow to create session with non-mentors', (done) => {
-    const session = {
-      mentorId: 2,
-      questions: 'Hello world',
-    };
+    const session = session04;
 
     chai.request(server)
       .post('/api/v1/auth/sessions')
