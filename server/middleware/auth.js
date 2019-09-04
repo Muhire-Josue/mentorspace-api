@@ -7,7 +7,7 @@ const auth = (req, res, next) => {
     const bearer = bearerHeader.split(' ');
     const bearerToken = bearer[1];
     req.token = bearerToken;
-    jwt.verify(req.token, process.env.API_SERCRET_KEY, (error, data) => {
+    return jwt.verify(req.token, process.env.API_SERCRET_KEY, (error, data) => {
         if (error) {
             // throw new Error("Authentication failed");
             return res.status(401).json({
@@ -16,9 +16,9 @@ const auth = (req, res, next) => {
             });
         } else {
             req.user = data;
+            next();
         }
     });
-    next();
 }
 
 export default auth;

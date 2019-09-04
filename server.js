@@ -1,5 +1,5 @@
 import express from 'express';
-import routes from './src/routes/router';
+import routes from './server/routes/router';
 
 const app = express();
 // eslint-disable-next-line no-undef

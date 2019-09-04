@@ -53,33 +53,38 @@ class userController {
       email, password,
     } = req.body;
     const user = User.find(u => u.email === email.toLowerCase());
-    if (!user) {
-      return res.status(404).json({
-        status: 404,
-        error: 'user not found',
+    try {
+      if (!user) {
+        return res.status(404).json({
+          status: 404,
+          error: 'user not found',
+        });
+      }
+      const {
+        firstname, lastname, pass, address, status,
+      } = user;
+      const jsToken = jwt.sign({
+        id: user.id, email, firstname, lastname, pass, address, status,
+      }, process.env.API_SERCRET_KEY);
+      const comparePassword = hash.compareSync(password, user.password);
+      if (!comparePassword) {
+        return res.status(400).json({
+          status: 400,
+          error: 'password not matching',
+        });
+      }
+      return res.status(200).json({
+        status: 200,
+        message: 'User is successfully logged in',
+        token: jsToken,
+        data: {
+          id: user.id, email: user.email, userType: user.userType,
+        },
       });
+      
+    } catch (error) {
+      
     }
-    const {
-      firstname, lastname, pass, address, status,
-    } = user;
-    const jsToken = jwt.sign({
-      id: user.id, email, firstname, lastname, pass, address, status,
-    }, process.env.API_SERCRET_KEY);
-    const comparePassword = hash.compareSync(password, user.password);
-    if (!comparePassword) {
-      return res.status(400).json({
-        status: 400,
-        error: 'password not matching',
-      });
-    }
-    return res.status(200).json({
-      status: 200,
-      message: 'User is successfully logged in',
-      token: jsToken,
-      data: {
-        id: user.id, email: user.email, userType: user.userType,
-      },
-    });
   }
 
   // Create mentorship session
