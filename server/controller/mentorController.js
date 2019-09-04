@@ -1,10 +1,6 @@
-/* eslint-disable no-console */
-/* eslint-disable radix */
 import Mentor from '../model/user';
 import Session from '../model/session';
-// import jwt from 'jsonwebtoken';
-// import hash from 'bcrypt-nodejs';
-// import mentortValidation from './validation/userValidation';
+
 
 class mentorController {
   // Get all Mentors

@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+
 
 import chai from 'chai';
 import chaiHttp from 'chai-http';
@@ -9,7 +9,6 @@ chai.should();
 
 
 // Sign Up
-// eslint-disable-next-line no-undef
 describe('User tests', () => {
   it('should be signup', (done) => {
     const user = {

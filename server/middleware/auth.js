@@ -9,7 +9,6 @@ const auth = (req, res, next) => {
     req.token = bearerToken;
     return jwt.verify(req.token, process.env.API_SERCRET_KEY, (error, data) => {
         if (error) {
-            // throw new Error("Authentication failed");
             return res.status(401).json({
                 status: 401,
                 message: 'please login first or sign up',

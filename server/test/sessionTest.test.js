@@ -1,11 +1,9 @@
-/* eslint-disable no-undef */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server';
 
 chai.use(chaiHttp);
 chai.should();
-// eslint-disable-next-line no-undef
 describe('Sessions tests', () => {
   it('should allow users to create session request', (done) => {
     const session = {
