@@ -1,5 +1,7 @@
 import Mentor from '../model/user';
 import Session from '../model/session';
+import sucess from '../helper/endPointResponse/sucess';
+import failure from '../helper/endPointResponse/failure';
 
 
 class mentorController {
@@ -7,14 +9,16 @@ class mentorController {
   static all(req, res) {
     const mentors = Mentor.filter(m => m.status === 'mentor');
     if (req.user.status === 'user' || req.user.status === 'admin') {
-      res.status(200).json({
-        status: 200,
-        data: mentors,
+      const data = sucess('No message', 200, mentors);
+      res.status(data.status).json({
+        status: data.status,
+        data: data.data,
       });
     } else {
-      res.status(401).json({
-        status: 401,
-        error: 'Unauthorized access',
+      const data = failure('Unauthorized access', 401);
+      res.status(data.status).json({
+        status: data.status,
+        error: data.message,
       });
     }
   }
@@ -25,27 +29,29 @@ class mentorController {
     if (req.user.status === 'user') {
       const mentor = mentors.find(m => m.id === parseInt(req.params.id));
       if (mentor) {
-        res.status(200).json({
-          status: 200,
-          data: mentor,
+        const data = sucess('No message', 200, mentor);
+        res.status(data.status).json({
+          status: data.status,
+          data: data.data,
         });
       } else {
+        const data = failure('Mentor not found', 404);
         res.status(404).json({
           status: 404,
-          error: 'Mentor not found',
+          error: data.data,
 
         });
       }
     } else {
-      res.status(401).json({
-        status: 401,
-        error: 'Unauthorized access',
+      const data = failure('Unauthorized access', 401);
+      res.status(data.status).json({
+        status: data.status,
+        error: data.message,
       });
     }
   }
 
 
-  // Accept session
   static acceptSession(req, res) {
     if (req.user.status === 'mentor') {
       const id = req.params.sessionId;
@@ -53,30 +59,34 @@ class mentorController {
       if (session) {
         if (req.user.id === session.mentorId) {
           session.status = 'accepted';
-          res.status(200).json({
-            data: session,
+          const data = sucess('No message', 200, session);
+          res.status(data.status).json({
+            data: data.data,
           });
         } else {
-          res.status(401).json({
-            status: 401,
-            error: 'Unauthorized operation',
+          const data = failure('Unauthorized access', 401);
+          res.status(data.status).json({
+            status: data.status,
+            error: data.message,
           });
         }
       } else {
-        res.status(404).json({
-          error: 404,
-          message: 'User not found',
+        const data = failure('user not found', 404);
+        res.status(data.status).json({
+          status: data.status,
+          error: data.message,
         });
       }
     } else {
-      res.status(400).json({
-        status: 400,
-        error: 'Unauthorized access',
+      const data = failure('Unauthorized access', 400);
+      res.status(data.status).json({
+        status: data.status,
+        error: data.message,
       });
     }
   }
 
-  // Reject session
+
   static rejectSession(req, res) {
     if (req.user.status === 'mentor') {
       const id = req.params.sessionId;
@@ -84,25 +94,29 @@ class mentorController {
       if (session) {
         if (req.user.id === session.mentorId) {
           session.status = 'rejected';
-          res.status(200).json({
-            data: session,
+          const data = sucess('No message', 200, session);
+          res.status(data.status).json({
+            data: data.data,
           });
         } else {
-          res.status(401).json({
-            status: 401,
-            error: 'Unauthorized operation',
+          const data = failure('Unauthorized access', 401);
+          res.status(data.status).json({
+            status: data.status,
+            error: data.message,
           });
         }
       } else {
-        res.status(404).json({
-          error: 404,
-          message: 'User not found',
+        const data = failure('user not found', 404);
+        res.status(data.status).json({
+          status: data.status,
+          error: data.message,
         });
       }
     } else {
-      res.status(401).json({
-        status: 401,
-        error: 'Unauthorized access',
+      const data = failure('Unauthorized access', 400);
+      res.status(data.status).json({
+        status: data.status,
+        error: data.message,
       });
     }
   }

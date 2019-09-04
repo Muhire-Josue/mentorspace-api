@@ -17,7 +17,17 @@ chai.should();
 // Sign Up
 describe('User tests', () => {
   it('should be signup', (done) => {
-    const user = user01;
+    const user = {
+      firstname: 'Olubunmi',
+      lastname: 'Yaw',
+      email: 'olubunmi@yaw.com',
+      password: 'user4',
+      address: 'Gisenyi',
+      bio: 'HRmanager',
+      occupation: 'Human resources',
+      expertise: 'HR Manager',
+      status: 'user',
+    };
     chai.request(server)
       .post('/api/v1/auth/signup')
       .send(user)
@@ -46,7 +56,7 @@ describe('User tests', () => {
         res.body.status.should.be.equal(400);
         res.body.error.should.be.a('string');
       });
-    done();
+      done();
   });
 
   it('Should not sign up existing email', (done) => {

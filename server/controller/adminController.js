@@ -1,27 +1,31 @@
 import User from '../model/user';
+import sucess from '../helper/endPointResponse/sucess';
+import failure from '../helper/endPointResponse/failure';
 
 class adminController {
-  // Change user to mentor
   static userToMentor(req, res) {
     if (req.user.status === 'admin') {
       const userIndex = User.findIndex(u => u.id === parseInt(req.params.userId));
       if (User[userIndex].status === 'user') {
         User[userIndex].status = 'mentor';
-        res.status(200).json({
-          status: 200,
-          message: 'User account changed to mentor',
+        const data = sucess('User account changed to mentor', 200, User[userIndex]);
+        res.status(data.status).json({
+          status: data.status,
+          message: data.data,
           data: User[userIndex],
         });
       } else {
-        res.status(400).json({
-          status: 400,
-          error: 'User is already a mentor',
+        const data = failure('User is already a mentor', 400);
+        res.status(data.status).json({
+          status: data.status,
+          error: data.message,
         });
       }
     } else {
-      res.status(401).json({
-        status: 401,
-        error: 'Unauthorized access',
+      const data = failure('Unauthorized access', 401);
+      res.status(data.status).json({
+        status: data.status,
+        error: data.message,
       });
     }
   }

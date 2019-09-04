@@ -1,13 +1,13 @@
 const user01 = {
-    firstname: 'Olubunmi',
-    lastname: 'Yaw',
-    email: 'olubunmi@yaw.com',
-    password: 'user4',
-    address: 'Gisenyi',
-    bio: 'HRmanager',
-    occupation: 'Human resources',
-    expertise: 'HR Manager',
-    status: 'user',
-  };
+  firstname: "josue",
+  lastname: "muhire",
+  email: "muhire@example.com",
+  password: "user4",
+  addess: "Kigali",
+  bio: "DevOps",
+  occupation: "Hardware resources",
+  expertise: "product Manager",
+  status: "user",
+};
 
-  export default user01;
+export default user01;
