@@ -42,7 +42,7 @@ npm test
 | API | Methods  | Description  |
 | ------- | --- | --- |
 | `/api/v1/auth/signup` | POST | user signup |
-| `/api/v1/auth/login` | POST | user login |
+| `/api/v1/auth/signin` | POST | user login |
 | `/api/v1/sessions` | POST | create sessions |
 | `api/v1/auth/mentors/:userId` | GET | display a mentor |
 | `api/v1/auth/sessions/sessionId/accept` | PATCH | mentor accept a session request |
