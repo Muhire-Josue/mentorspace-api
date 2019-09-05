@@ -1,12 +1,18 @@
-
-
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server';
+import user01 from '../helper/testObj/user1';
+import user02 from '../helper/testObj/user2';
+import user03 from '../helper/testObj/user3';
+import user04 from '../helper/testObj/user4';
+import user05 from '../helper/testObj/user5';
+import user06 from '../helper/testObj/user6';
+import user07 from '../helper/testObj/user7';
+import user08 from '../helper/testObj/user8';
+import user09 from '../helper/testObj/user9';
 
 chai.use(chaiHttp);
 chai.should();
-
 
 // Sign Up
 describe('User tests', () => {
@@ -37,20 +43,11 @@ describe('User tests', () => {
         res.body.data.should.have.property('occupation');
         res.body.data.should.have.property('expertise');
         res.body.data.should.have.property('status');
+        done();
       });
-    done();
   });
   it('Should not work if all fields are not filled', (done) => {
-    const user = {
-      firstname: 'Josue',
-      email: 'josue@gmail.com',
-      password: 'example12',
-      address: 'kigali-rwanda',
-      bio: 'DevOp manager',
-      occupation: 'software engineer',
-      expertise: 'backend engineer',
-      status: 'user',
-    };
+    const user = user02;
     chai.request(server)
       .post('/api/v1/auth/signup')
       .send(user)
@@ -59,20 +56,11 @@ describe('User tests', () => {
         res.body.status.should.be.equal(400);
         res.body.error.should.be.a('string');
       });
-    done();
+      done();
   });
 
   it('Should not sign up existing email', (done) => {
-    const user = {
-      firstname: 'Josue',
-      email: 'muhirejosue@gmail.com',
-      password: 'example12',
-      address: 'kigali-rwanda',
-      bio: 'DevOp manager',
-      occupation: 'software engineer',
-      expertise: 'backend engineer',
-      status: 'user',
-    };
+    const user = user03;
 
     chai.request(server)
       .post('/api/v1/auth/signup')
@@ -86,17 +74,7 @@ describe('User tests', () => {
   });
 
   it('Should not accept incorrect email input format', (done) => {
-    const user = {
-      firstname: 'Josue',
-      lastname: 'Muhire',
-      email: 123,
-      password: 'example12',
-      address: 'kigali-rwanda',
-      bio: 'DevOp manager',
-      occupation: 'software engineer',
-      expertise: 'backend engineer',
-      status: 'user',
-    };
+    const user = user04;
 
     chai.request(server)
       .post('/api/v1/auth/signup')
@@ -111,20 +89,7 @@ describe('User tests', () => {
   });
 
   it('Should not accept an already used email', (done) => {
-    const user = {
-
-      firstname: 'Olubunmi',
-      lastname: 'Yaw',
-      email: 'muhirejosue09@gmail.com',
-      password: 'user4',
-      address: 'Gisenyi',
-      bio: 'HRmanager',
-      occupation: 'Human resources',
-      expertise: 'HR Manager',
-      status: 'user',
-
-
-    };
+    const user = user05;
 
     chai.request(server)
       .post('/api/v1/auth/signup')
@@ -138,10 +103,7 @@ describe('User tests', () => {
   });
   // Sign In
   it('Should be login', (done) => {
-    const user = {
-      email: 'muhirejosue09@gmail.com',
-      password: 'user1',
-    };
+    const user = user06;
 
     chai.request(server)
       .post('/api/v1/auth/signin')
@@ -154,10 +116,7 @@ describe('User tests', () => {
   });
 
   it('Should not SignIn non-existing email', (done) => {
-    const user = {
-      email: 'muhirejosue@gmail.com',
-      password: 'user1',
-    };
+    const user = user07;
     chai.request(server)
       .post('/api/v1/auth/signin')
       .send(user)
@@ -169,10 +128,7 @@ describe('User tests', () => {
 
 
   it('should not be able to signin when not signed up', (done) => {
-    const user = {
-      email: 'a@gmail.com',
-      password: 'bertin123',
-    };
+    const user = user08;
     chai.request(server)
       .post('/api/v1/auth/signin')
       .send(user)
@@ -185,10 +141,7 @@ describe('User tests', () => {
   });
 
   it('should not be able to signin when passwords are not matching', (done) => {
-    const user = {
-      email: 'muhirejosue09@gmail.com',
-      password: 'trash',
-    };
+    const user = user09;
     chai.request(server)
       .post('/api/v1/auth/signin')
       .send(user)
