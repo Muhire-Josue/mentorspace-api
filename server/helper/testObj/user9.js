@@ -1,6 +1,6 @@
 const user09 = {
-    email: 'muhirejosue09@gmail.com',
-    password: 'trash',
+  email: 'olubunmi@yahoo.uk.co',
+  password: 'user',
   };
 
   export default user09;

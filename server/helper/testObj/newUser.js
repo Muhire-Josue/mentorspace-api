@@ -1,4 +1,5 @@
-const user03 = {
+const user = {
+  id: 10,
   firstname: 'Olubunmi',
   lastname: 'Yaw',
   email: 'olubunmi@yahoo.uk.co',
@@ -9,5 +10,4 @@ const user03 = {
   expertise: 'HR Manager',
   status: 'user',
 };
-
-export default user03;
+export default user;

@@ -5,18 +5,28 @@ import session01 from '../helper/testObj/session1';
 import session02 from '../helper/testObj/session2';
 import session03 from '../helper/testObj/session3';
 import session04 from '../helper/testObj/session04';
+import userToken from '../helper/tokens/userToken';
+import mentorToken from '../helper/tokens/mentorToken';
+import User from '../model/user';
+import Session from '../model/session';
+import newUser from '../helper/testObj/newUser';
+import user from '../helper/testObj/user';
 const { expect } = chai;
 
 chai.use(chaiHttp);
 chai.should();
-describe('Sessions tests', () => {
+
+describe('Session Test',() => {
+
+  before( () => {
+    User.push(user);  
+  });
   it('should allow users to create session request', (done) => {
     const session = session01;
-
     chai.request(server)
       .post('/api/v1/auth/sessions')
       .send(session)
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoib2x1YnVubWlAeWF3LmNvbSIsImZpcnN0bmFtZSI6Ik9sdWJ1bm1pIiwibGFzdG5hbWUiOiJZYXciLCJhZGRyZXNzIjoiR2lzZW55aSIsInN0YXR1cyI6InVzZXIiLCJpYXQiOjE1NjYzMDY4Njh9.Pp9_u4M-n-hUuPktt9u6cjuZfYoUWHDlkNaQq-xkoqk')
+      .set('Authorization', `Bearer ${userToken}`)
       .end((err, res) => {
         res.body.status.should.be.equal(201);
         res.body.should.be.an('object');
@@ -28,12 +38,12 @@ describe('Sessions tests', () => {
 
 
   it('should allow not other type of users to create session', (done) => {
-    const session = session02;
+    const session = session01;
 
     chai.request(server)
       .post('/api/v1/auth/sessions')
       .send(session)
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoib2x1YnVubWlAeWF3LmNvbSIsImZpcnN0bmFtZSI6Ik9sdWJ1bm1pIiwibGFzdG5hbWUiOiJZYXciLCJhZGRyZXNzIjoiR2lzZW55aSIsInN0YXR1cyI6Im1lbnRvciIsImlhdCI6MTU2NjMwMTc0Nn0.QV1zSWcoy7p1RTDjDF-lF2_xNiE-STPncttcosGi3wQ')
+      .set('Authorization', `Bearer ${mentorToken}`)
       .end((err, res) => {
         res.body.status.should.be.equal(401);
         expect(res.body.error).to.equal('Unauthorized access');
@@ -47,8 +57,8 @@ describe('Sessions tests', () => {
     chai.request(server)
       .post('/api/v1/auth/sessions')
       .send(session)
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoib2x1YnVubWlAeWF3LmNvbSIsImZpcnN0bmFtZSI6Ik9sdWJ1bm1pIiwibGFzdG5hbWUiOiJZYXciLCJhZGRyZXNzIjoiR2lzZW55aSIsInN0YXR1cyI6InVzZXIiLCJpYXQiOjE1NjYyOTk4MTJ9.HM1o8BFFMkDwEukHULcEI7Ola1sPht5g9mp56Cnnsts')
-      .end((err, res) => {
+      .set('Authorization', `Bearer ${userToken}`)
+      .end((err, res) => {        
         res.body.should.be.an('object');
         res.body.status.should.be.equal(403);
       });
@@ -62,7 +72,7 @@ describe('Sessions tests', () => {
     chai.request(server)
       .post('/api/v1/auth/sessions')
       .send(session)
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImVtYWlsIjoib2x1YnVubWlAeWF3LmNvbSIsImZpcnN0bmFtZSI6Ik9sdWJ1bm1pIiwibGFzdG5hbWUiOiJZYXciLCJhZGRyZXNzIjoiR2lzZW55aSIsInN0YXR1cyI6InVzZXIiLCJpYXQiOjE1NjYyOTk4MTJ9.HM1o8BFFMkDwEukHULcEI7Ola1sPht5g9mp56Cnnsts')
+      .set('Authorization', `Bearer ${userToken}`)
       .end((err, res) => {
         res.body.should.be.an('object');
         res.body.status.should.be.equal(400);
@@ -81,3 +91,4 @@ describe('Sessions tests', () => {
     done();
   });
 });
+

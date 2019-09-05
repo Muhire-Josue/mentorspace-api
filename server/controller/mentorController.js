@@ -2,6 +2,7 @@ import Mentor from '../model/user';
 import Session from '../model/session';
 import sucess from '../helper/endPointResponse/sucess';
 import failure from '../helper/endPointResponse/failure';
+import newSession from '../helper/testObj/newSession';
 
 
 class mentorController {
@@ -59,6 +60,7 @@ class mentorController {
       const id = req.params.sessionId;
       const session = Session.find(s => s.sessionId === parseInt(id));
       if (session) {
+        
         if (req.user.id === session.mentorId) {
           session.status = 'accepted';
           const data = sucess('Session accepted', 200, session);
