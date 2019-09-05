@@ -53,4 +53,4 @@ npm test
 - using [postman](https://www.getpostman.com/downloads/)
 
 ### Pivotal tracker stories
-- using [stories](https://www.pivotaltracker.com/n/projects/2384182)
+- [Stories](https://www.pivotaltracker.com/n/projects/2384182)
