@@ -45,11 +45,12 @@ npm test
 | `/api/v1/auth/login` | POST | user login |
 | `/api/v1/sessions` | POST | create sessions |
 | `api/v1/auth/mentors/:userId` | GET | display a mentor |
+| `api/v1/auth/sessions/sessionId/accept` | PATCH | mentor accept a session request |
+| `api/v1/auth/sessions/sessionId/reject` | PATCH | mentor reject a session request |
 | `/api/v1/mentors` | GET | display all mentors |
-| `api/v1/auth/sessions/:userId/accept` | PATCH | change user to mentor |
-| `api/v1/auth/sessions/sessionId/accept` | PATCH | change user to mentor |
-| `/api/v1/transactions/<accountNo>/credit` | POST | credit a bank account |
+| `api/v1/auth/users/:userId` | PATCH | change user to mentor |
 ### How can it be manually tested
 - using [postman](https://www.getpostman.com/downloads/)
-### How can it be manually tested
-- using [postman](https://www.getpostman.com/downloads/)
+
+### Pivotal tracker stories
+- using [stories](https://www.pivotaltracker.com/n/projects/2384182)
