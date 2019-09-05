@@ -12,6 +12,7 @@ import user08 from '../helper/testObj/user8';
 import user09 from '../helper/testObj/user9';
 
 chai.use(chaiHttp);
+const { expect } = chai;
 chai.should();
 
 // Sign Up
@@ -43,6 +44,7 @@ describe('User tests', () => {
         res.body.data.should.have.property('occupation');
         res.body.data.should.have.property('expertise');
         res.body.data.should.have.property('status');
+        expect(res.body.message).to.equal('User created successfully');
         done();
       });
   });
@@ -54,9 +56,9 @@ describe('User tests', () => {
       .end((req, res) => {
         res.body.should.be.an('object');
         res.body.status.should.be.equal(400);
-        res.body.error.should.be.a('string');
+
       });
-      done();
+    done();
   });
 
   it('Should not sign up existing email', (done) => {
@@ -66,9 +68,10 @@ describe('User tests', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((req, res) => {
-        res.body.status.should.be.equal(400);
+        res.body.status.should.be.equal(401);
         res.body.should.be.an('object');
         res.body.error.should.be.a('string');
+        expect(res.body.error).to.equal('Email already exist');
       });
     done();
   });
@@ -82,25 +85,11 @@ describe('User tests', () => {
       .end((req, res) => {
         res.body.should.be.an('object');
         res.body.status.should.be.equal(400);
-        res.body.error.should.be.a('string');
       });
 
     done();
   });
 
-  it('Should not accept an already used email', (done) => {
-    const user = user05;
-
-    chai.request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((req, res) => {
-        res.body.should.be.an('object');
-        res.body.status.should.be.equal(401);
-        res.body.error.should.be.a('string');
-      });
-    done();
-  });
   // Sign In
   it('Should be login', (done) => {
     const user = user06;
@@ -111,6 +100,7 @@ describe('User tests', () => {
       .end((req, res) => {
         res.body.status.should.be.equal(200);
         res.body.should.be.an('object');
+        expect(res.body.message).to.equal('User is successfully logged in');
       });
     done();
   });
@@ -122,6 +112,7 @@ describe('User tests', () => {
       .send(user)
       .end((req, res) => {
         res.body.status.should.be.equal(404);
+        expect(res.body.error).to.equal('user not found');
       });
     done();
   });

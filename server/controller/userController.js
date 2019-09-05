@@ -125,11 +125,19 @@ class userController {
         return res.status(result.status).json(result);
       } else {
         const err = failure('Bad request', 400);
-        return res.status(err.status).json(err);
+        return res.status(err.status).json(
+          {
+            status: err.status,
+            error: err.message
+          });
       }
     } else {
       const err = failure('Unauthorized access', 401);
-      return res.status(err.status).json(err);
+      return res.status(err.status).json(
+        {
+          status: err.status,
+          error: err.message
+        });
     }
   }
 }
