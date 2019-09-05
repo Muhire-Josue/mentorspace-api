@@ -1,4 +1,3 @@
-/* eslint-disable radix */
 import User from '../model/user';
 
 class adminController {
