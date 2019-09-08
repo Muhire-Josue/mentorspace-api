@@ -10,9 +10,9 @@
     "createTables:dev": "SET \"NODE_ENV=dev\" && babel-node ./src/model/db createTables",
     "dropTables": "babel-node ./src/model/db dropTables",
     "createTables": "babel-node ./src/model/db createTables",
-    "start": "babel-node app.js --presets env",
-    "start:dev": "SET \"NODE_ENV=dev\" && nodemon app.js --exec babel-node --presets env",
-    "test": "npm run dropTables:test && npm run createTables:test && SET \"NODE_ENV=test\" && nyc --reporter=html --reporter=text mocha --require babel-register --timeout 10000 --exit src/tests/*",
+    "start": "babel-node app.js --presets @babel/preset-env",
+    "start:dev": "SET \"NODE_ENV=dev\" && nodemon app.js --exec babel-node --presets @babel/preset-env",
+    "test": "npm run dropTables:test && npm run createTables:test && SET \"NODE_ENV=test\" && nyc --reporter=html --reporter=text mocha --require @babel/register --timeout 10000 --exit src/tests/**.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
@@ -26,6 +26,11 @@
   },
   "homepage": "https://github.com/Muhire-Josue/mentorspace-api#readme",
   "dependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
     "@hapi/joi": "^15.1.0",
     "babel-cli": "^6.26.0",
     "babel-polyfill": "^6.26.0",
