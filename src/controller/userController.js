@@ -1,13 +1,9 @@
-/* eslint-disable max-len */
-/* eslint-disable consistent-return */
 import jwt from 'jsonwebtoken';
 import hash from 'bcrypt-nodejs';
 import dotenv from 'dotenv';
 import userSchema from '../helper/userValidation';
 import sessionSchema from '../helper/sessionValidation';
-import User from '../model/user';
 import db from '../model';
-import Session from '../model/session';
 
 dotenv.config();
 
@@ -63,12 +59,14 @@ class userController {
   }
 
   // SignIn
-  static signIn(req, res) {
+  static async signIn(req, res) {
     const {
       email, password,
     } = req.body;
-    const user = User.find(u => u.email === email.toLowerCase());
-    if (!user) {
+    // const user = User.find(u => u.email === email.toLowerCase());
+    const {rows} = await db.query('SELECT * FROM users WHERE email=$1', [email]);
+
+    if (!rows.length > 0) {
       return res.status(404).json({
         status: 404,
         error: 'user not found',
@@ -76,11 +74,11 @@ class userController {
     }
     const {
       firstname, lastname, pass, address, status,
-    } = user;
+    } = rows[0];
     const jsToken = jwt.sign({
-      id: user.id, email, firstname, lastname, pass, address, status,
+      id: rows[0].id, email, firstname, lastname, pass, address, status,
     }, process.env.API_SERCRET_KEY);
-    const comparePassword = hash.compareSync(password, user.password);
+    const comparePassword = hash.compareSync(password, rows[0].password);
     if (!comparePassword) {
       return res.status(400).json({
         status: 400,
@@ -92,7 +90,7 @@ class userController {
       message: 'User is successfully logged in',
       token: jsToken,
       data: {
-        id: user.id, email: user.email, userType: user.userType,
+        id: rows[0].id, email: rows[0].email, status: rows[0].status,
       },
     });
   }
@@ -101,13 +99,11 @@ class userController {
   static async createSession(req, res) {
     if (req.user.status === 'user') {
       const { questions, mentorId } = req.body;
-      // eslint-disable-next-line radix
-      // const mentor = User.find(u => u.id === parseInt(mentorId));
       const mentor = await db.query('SELECT * FROM users WHERE id=$1', [mentorId]);
       if (mentor.rows.length < 1) {
         return res.status(404).json({
           status: 404,
-          error: 'User doesnt already exist',
+          error: 'User doesn\'t exist',
         });
       }
       if (mentor.rows[0].status === 'mentor') {
@@ -118,13 +114,10 @@ class userController {
           menteeEmail: req.user.email,
           status: 'pending'
         };
-        console.log(req.user);
-        
 
         const session = sessionSchema.validate(newSession);
 
         if (session.error) { return res.status(403).json({ status: 403, error: session.error.details[0].message }); }
-        // Session.push(newSession);
 
         const text = `INSERT INTO
                       sessions("mentorId", "menteeId", questions, menteeEmail, status)
@@ -133,17 +126,17 @@ class userController {
 
         const values = [newSession.mentorId, newSession.menteeId, newSession.questions, newSession.menteeEmail, newSession.status];
         const { rows } = await db.query(text, values);
-        res.status(201).json({
+        return res.status(201).json({
           data: rows[0]
         });
       } else {
-        res.status(400).json({
+        return res.status(400).json({
           status: 400,
           error: 'Bad request',
         });
       }
     } else {
-      res.status(401).json({
+      return res.status(401).json({
         status: 401,
         error: 'Unauthorized access',
         auth: req.user.status,

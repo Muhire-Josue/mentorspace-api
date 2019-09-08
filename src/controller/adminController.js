@@ -1,26 +1,28 @@
-/* eslint-disable radix */
-import User from '../model/user';
+import db from '../model/index';
 
 class adminController {
   // Change user to mentor
-  static userToMentor(req, res) {
+  static async userToMentor(req, res) {
     if (req.user.status === 'admin') {
-      const userIndex = User.findIndex(u => u.id === parseInt(req.params.userId));
-      if (User[userIndex].status === 'user') {
-        User[userIndex].status = 'mentor';
-        res.status(200).json({
+      const id = parseInt(req.params.userId);
+      const {rows} = await db.query('SELECT * FROM users WHERE id=$1', [id]);
+      if (rows[0].status === 'user') {
+
+        const text = `UPDATE users SET status=$1 WHERE id=${id} RETURNING *`;
+        const values = ['mentor'];
+        await db.query(text, values);
+      return  res.status(200).json({
           status: 200,
           message: 'User account changed to mentor',
-          data: User[userIndex],
         });
       } else {
-        res.status(400).json({
+      return  res.status(400).json({
           status: 400,
           error: 'User is already a mentor',
         });
       }
     } else {
-      res.status(401).json({
+     return res.status(401).json({
         status: 401,
         error: 'Unauthorized access',
       });

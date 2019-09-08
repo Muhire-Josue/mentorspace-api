@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server';
@@ -7,7 +6,6 @@ import db from '../model';
 
 chai.use(chaiHttp);
 chai.should();
-
 
 // Sign Up
 // eslint-disable-next-line no-undef
@@ -48,8 +46,8 @@ describe('User tests', () => {
         res.body.data.should.have.property('occupation');
         res.body.data.should.have.property('expertise');
         res.body.data.should.have.property('status');
+        done();
       });
-    done();
   });
   it('Should not work if all fields are not filled', (done) => {
     const user = {
@@ -69,8 +67,8 @@ describe('User tests', () => {
         res.body.should.be.an('object');
         res.body.status.should.be.equal(400);
         res.body.error.should.be.a('string');
+        done();
       });
-    done();
   });
 
   it('Should not sign up existing email', (done) => {
@@ -92,8 +90,8 @@ describe('User tests', () => {
         res.body.status.should.be.equal(400);
         res.body.should.be.an('object');
         res.body.error.should.be.a('string');
+        done();
       });
-    done();
   });
 
   it('Should not accept incorrect email input format', (done) => {
@@ -116,9 +114,9 @@ describe('User tests', () => {
         res.body.should.be.an('object');
         res.body.status.should.be.equal(400);
         res.body.error.should.be.a('string');
+        done();
       });
 
-    done();
   });
 
   it('Should not accept an already used email', (done) => {
@@ -126,7 +124,7 @@ describe('User tests', () => {
 
       firstname: 'Olubunmi',
       lastname: 'Yaw',
-      email: 'muhirejosue09@gmail.com',
+      email: 'olubunmi@yaw.com',
       password: 'user4',
       address: 'Gisenyi',
       bio: 'HRmanager',
@@ -144,14 +142,14 @@ describe('User tests', () => {
         res.body.should.be.an('object');
         res.body.status.should.be.equal(401);
         res.body.error.should.be.a('string');
+        done();
       });
-    done();
   });
   // Sign In
   it('Should be login', (done) => {
     const user = {
-      email: 'muhirejosue09@gmail.com',
-      password: 'user1',
+      email: 'olubunmi@yaw.com',
+      password: 'user4',
     };
 
     chai.request(server)
@@ -160,8 +158,8 @@ describe('User tests', () => {
       .end((req, res) => {
         res.body.status.should.be.equal(200);
         res.body.should.be.an('object');
+        done();
       });
-    done();
   });
 
   it('Should not SignIn non-existing email', (done) => {
@@ -174,8 +172,8 @@ describe('User tests', () => {
       .send(user)
       .end((req, res) => {
         res.body.status.should.be.equal(404);
+        done();
       });
-    done();
   });
 
 
@@ -191,13 +189,13 @@ describe('User tests', () => {
         res.body.status.should.be.equal(404);
         res.body.should.be.an('object');
         res.body.error.should.be.equal('user not found');
+        done();
       });
-    done();
   });
 
   it('should not be able to signin when passwords are not matching', (done) => {
     const user = {
-      email: 'muhirejosue09@gmail.com',
+      email: 'olubunmi@yaw.com',
       password: 'trash',
     };
     chai.request(server)
@@ -207,7 +205,7 @@ describe('User tests', () => {
         res.body.status.should.be.equal(400);
         res.body.should.be.an('object');
         res.body.error.should.be.equal('password not matching');
+        done();
       });
-    done();
   });
 });

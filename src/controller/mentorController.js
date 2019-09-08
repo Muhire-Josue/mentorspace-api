@@ -1,19 +1,21 @@
-/* eslint-disable no-console */
-/* eslint-disable radix */
-import Mentor from '../model/user';
-import Session from '../model/session';
-// import jwt from 'jsonwebtoken';
-// import hash from 'bcrypt-nodejs';
-// import mentortValidation from './validation/userValidation';
+import db from '../model';
+
 
 class mentorController {
-  // Get all Mentors
-  static all(req, res) {
-    const mentors = Mentor.filter(m => m.status === 'mentor');
+  /**
+   * @param {object} req 
+   * @param {object} res 
+   * @return all Mentors
+   */
+  static async all(req, res) {
+    const criterea = 'mentor';
+    // const mentors = Mentor.filter(m => m.status === 'mentor');
+    const { rows } = await db.query('SELECT * FROM users WHERE status=$1', [criterea]);
+    const mentors = rows;
     if (req.user.status === 'user' || req.user.status === 'admin') {
       res.status(200).json({
         status: 200,
-        data: mentors,
+        mentors,
       });
     } else {
       res.status(401).json({
@@ -24,14 +26,15 @@ class mentorController {
   }
 
   // Get a mentor
-  static findMentorById(req, res) {
-    const mentors = Mentor.filter(m => m.status === 'mentor');
+  static async findMentorById(req, res) {
+    const pId = parseInt(req.params.id);
+    const { rows } = await db.query('SELECT * FROM users WHERE status=\'mentor\' AND id=$1', [pId]);
     if (req.user.status === 'user') {
-      const mentor = mentors.find(m => m.id === parseInt(req.params.id));
-      if (mentor) {
+      // const mentor = mentors.find(m => m.id === parseInt(req.params.id));
+      if (rows.length > 0) {
         res.status(200).json({
           status: 200,
-          data: mentor,
+          data: rows,
         });
       } else {
         res.status(404).json({
@@ -50,15 +53,19 @@ class mentorController {
 
 
   // Accept session
-  static acceptSession(req, res) {
+  static async acceptSession(req, res) {
     if (req.user.status === 'mentor') {
       const id = req.params.sessionId;
-      const session = Session.find(s => s.sessionId === parseInt(id));
-      if (session) {
-        if (req.user.id === session.mentorId) {
-          session.status = 'accepted';
+      // const session = Session.find(s => s.sessionId === parseInt(id));
+      const { rows } = await db.query('SELECT * FROM sessions WHERE "sessionId"=$1', [id]);
+      if (rows[0]) {
+        if (req.user.id === rows[0].mentorId) {
+          const text = `UPDATE sessions SET status=$1 WHERE "sessionId"=${id} RETURNING *`;
+          const values = ['accept'];
+          await db.query(text, values);
           res.status(200).json({
-            data: session,
+            status: 200,
+            message: 'Session has been accepted'
           });
         } else {
           res.status(401).json({
@@ -69,7 +76,7 @@ class mentorController {
       } else {
         res.status(404).json({
           error: 404,
-          message: 'User not found',
+          message: 'Session not found',
         });
       }
     } else {
@@ -81,33 +88,42 @@ class mentorController {
   }
 
   // Reject session
-  static rejectSession(req, res) {
-    if (req.user.status === 'mentor') {
-      const id = req.params.sessionId;
-      const session = Session.find(s => s.sessionId === parseInt(id));
-      if (session) {
-        if (req.user.id === session.mentorId) {
-          session.status = 'rejected';
-          res.status(200).json({
-            data: session,
-          });
+  static async rejectSession(req, res) {
+    try {
+      if (req.user.status === 'mentor') {
+        const id = req.params.sessionId;
+        // const session = Session.find(s => s.sessionId === parseInt(id));
+        const { rows } = await db.query('SELECT * FROM sessions WHERE "sessionId"=$1', [id]);
+        if (rows[0]) {
+          if (req.user.id === rows[0].mentorId) {
+            const text = `UPDATE sessions SET status=$1 WHERE "sessionId"=${id} RETURNING *`;
+            const values = ['reject'];
+            await db.query(text, values);
+            res.status(200).json({
+              status: 200,
+              message: 'Session rejected successfully!'
+            });
+          } else {
+            res.status(401).json({
+              status: 401,
+              error: 'Unauthorized operation',
+            });
+          }
         } else {
-          res.status(401).json({
-            status: 401,
-            error: 'Unauthorized operation',
+          res.status(404).json({
+            error: 404,
+            message: 'User not found',
           });
         }
       } else {
-        res.status(404).json({
-          error: 404,
-          message: 'User not found',
+        res.status(401).json({
+          status: 401,
+          error: 'Unauthorized access',
         });
       }
-    } else {
-      res.status(401).json({
-        status: 401,
-        error: 'Unauthorized access',
-      });
+    } catch (error) {
+      console.log(error);
+      
     }
   }
 }
