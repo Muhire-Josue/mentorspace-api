@@ -1,8 +1,9 @@
+/* eslint-disable no-undef */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
-import db from '../model/index';
+import db from '../model';
 import server from '../../server';
 import { createUser, createSession } from '../helper/testHelper';
 
@@ -23,13 +24,15 @@ const user = {
 
 let normalUser = {};
 let mentorUser = {};
-let adminUser = {};
+let mentorUserTwo = {};
+let newSession = {};
+let newSessionTwo = {};
 
 let normalUserToken = '';
 let mentorUserToken = '';
-let adminUserToken = '';
+let mentorUserTwoToken = '';
 
-describe('Session tests', () => {
+describe('Mentor tests', () => {
   before(async () => {
     try {
       await db.query('TRUNCATE users CASCADE; ALTER SEQUENCE users_id_seq RESTART WITH 1;');
@@ -38,47 +41,41 @@ describe('Session tests', () => {
         ...user,
         status: 'mentor',
       });
-      adminUser = await createUser({
+      mentorUserTwo = await createUser({
         ...user,
-        email: 'admin@gmail.com',
-        status: 'admin',
+        email: 'mentor@gmail.com',
+        status: 'mentor',
       });
+      newSession = await createSession(mentorUser.id, normalUser.id);
+      newSessionTwo = await createSession(mentorUserTwo.id, normalUser.id);
 
       normalUserToken = jwt.sign(normalUser, process.env.API_SERCRET_KEY);
       mentorUserToken = jwt.sign(mentorUser, process.env.API_SERCRET_KEY);
-      adminUserToken = jwt.sign(adminUser, process.env.API_SERCRET_KEY);
+      mentorUserTwoToken = jwt.sign(mentorUserTwo, process.env.API_SERCRET_KEY);
     } catch (error) {
       console.log(error);
     }
   });
 
-  it('should let admin to change user to mentor', (done) => {
+  it('should be able to display all mentors', (done) => {
     chai.request(server)
-      .patch(`/api/v1/auth/user/${normalUser.id}`)
-      .set('Authorization', `Bearer ${adminUserToken}`)
-      .end((error, res) => {        
+      .get('/api/v1/mentors')
+      .set('Authorization', `Bearer ${normalUserToken}`)
+      .end((error, res) => {
         res.body.status.should.be.equal(200);
         done();
       });
   });
 
-    it('should not change the status of a mentor', (done) => {
-    chai.request(server)
-      .patch(`/api/v1/auth/user/${mentorUser.id}`)
-      .set('Authorization', `Bearer ${adminUserToken}`)
-      .end((error, res) => {
-        res.body.status.should.be.equal(400);
-        done();
-      });
-  });
 
-    it('should not allow other users to change status', (done) => {
+  it('should not display all mentors to other mentors', (done) => {
     chai.request(server)
-    .patch(`/api/v1/auth/user/${normalUser.id}`)
-    .set('Authorization', `Bearer ${normalUserToken}`)
+      .get('/api/v1/mentors')
+      .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
         res.body.status.should.be.equal(401);
         done();
       });
   });
+
 });

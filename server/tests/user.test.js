@@ -7,8 +7,6 @@ import db from '../model';
 chai.use(chaiHttp);
 chai.should();
 
-// Sign Up
-// eslint-disable-next-line no-undef
 describe('User tests', () => {
   // clear users table
   before(async () => {
@@ -40,7 +38,6 @@ describe('User tests', () => {
         res.body.data.should.have.property('firstname');
         res.body.data.should.have.property('lastname');
         res.body.data.should.have.property('email');
-        res.body.data.should.have.property('password');
         res.body.data.should.have.property('address');
         res.body.data.should.have.property('bio');
         res.body.data.should.have.property('occupation');
