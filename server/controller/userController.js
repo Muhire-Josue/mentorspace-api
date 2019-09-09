@@ -54,7 +54,8 @@ class userController {
             address: rows[0].address,
             bio: rows[0].bio,
             expertise: rows[0].expertise,
-            occupation: rows[0].occupation
+            occupation: rows[0].occupation,
+            status: rows[0].status
           }
         },
       );
