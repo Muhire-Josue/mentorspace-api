@@ -71,7 +71,6 @@ class userController {
     const {
       email, password,
     } = req.body;
-    // const user = User.find(u => u.email === email.toLowerCase());
     const {rows} = await db.query('SELECT * FROM users WHERE email=$1', [email]);
 
     if (!rows.length > 0) {
@@ -101,55 +100,6 @@ class userController {
       },
     });
   }
-
-  // Create mentorship session
-  // static async createSession(req, res) {
-  //   if (req.user.status === 'user') {
-  //     const { questions, mentorId } = req.body;
-  //     const mentor = await db.query('SELECT * FROM users WHERE id=$1', [mentorId]);
-  //     if (mentor.rows.length < 1) {
-  //       return res.status(404).json({
-  //         status: 404,
-  //         error: 'User doesn\'t exist',
-  //       });
-  //     }
-  //     if (mentor.rows[0].status === 'mentor') {
-  //       const newSession = {
-  //         mentorId: mentorId,
-  //         menteeId: req.user.id,
-  //         questions: questions,
-  //         menteeEmail: req.user.email,
-  //         status: 'pending'
-  //       };
-
-  //       const session = sessionSchema.validate(newSession);
-
-  //       if (session.error) { return res.status(403).json({ status: 403, error: session.error.details[0].message }); }
-
-  //       const text = `INSERT INTO
-  //                     sessions("mentorId", "menteeId", questions, menteeEmail, status)
-  //                     VALUES($1, $2, $3, $4, $5)
-  //                     returning *`;
-
-  //       const values = [newSession.mentorId, newSession.menteeId, newSession.questions, newSession.menteeEmail, newSession.status];
-  //       const { rows } = await db.query(text, values);
-  //       return res.status(201).json({
-  //         data: rows[0]
-  //       });
-  //     } else {
-  //       return res.status(400).json({
-  //         status: 400,
-  //         error: 'Bad request',
-  //       });
-  //     }
-  //   } else {
-  //     return res.status(401).json({
-  //       status: 401,
-  //       error: 'Unauthorized access',
-  //       auth: req.user.status,
-  //     });
-  //   }
-  // }
 }
 
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../../server';
@@ -63,29 +62,6 @@ describe('User tests', () => {
       .end((req, res) => {
         res.body.should.be.an('object');
         res.body.status.should.be.equal(400);
-        res.body.error.should.be.a('string');
-        done();
-      });
-  });
-
-  it('Should not sign up existing email', (done) => {
-    const user = {
-      firstname: 'Josue',
-      email: 'muhirejosue@gmail.com',
-      password: 'example12',
-      address: 'kigali-rwanda',
-      bio: 'DevOp manager',
-      occupation: 'software engineer',
-      expertise: 'backend engineer',
-      status: 'user',
-    };
-
-    chai.request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((req, res) => {
-        res.body.status.should.be.equal(400);
-        res.body.should.be.an('object');
         res.body.error.should.be.a('string');
         done();
       });
