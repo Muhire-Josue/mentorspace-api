@@ -92,6 +92,17 @@ describe('Mentor tests', () => {
       .get(`/api/v1/auth/mentors/${normalUser.id}`)
       .set('Authorization', `Bearer ${normalUserToken}`)
       .end((error, res) => {
+        res.body.status.should.be.equal(404);
+        done();
+      });
+  });
+
+  it('should not allow to view a mentor with invalid id', (done) => {
+    chai.request(server)
+      .get(`/api/v1/auth/mentors/abc`)
+      .set('Authorization', `Bearer ${normalUserToken}`)
+      .end((error, res) => {
+        res.body.status.should.be.equal(400);
         done();
       });
   });
