@@ -15,10 +15,8 @@ class userController {
     } = req.body;
 
     const newUser = userSchema.validate({
-      // eslint-disable-next-line max-len
       email, firstname, lastname, password, bio, address, occupation, expertise, status,
     });
-    // eslint-disable-next-line max-len
     if (newUser.error) { return res.status(400).json({ status: 400, error: newUser.error.details[0].message }); }
 
     const text = `INSERT INTO
@@ -47,8 +45,17 @@ class userController {
         {
           status: 201,
           message: 'User created successfully',
-          token,
-          data: rows[0],
+          data: {
+            token: token,
+            id: rows[0].id,
+            firstname: rows[0].firstname,
+            lastname: rows[0].lastname,
+            email: rows[0].email,
+            address: rows[0].address,
+            bio: rows[0].bio,
+            expertise: rows[0].expertise,
+            occupation: rows[0].occupation
+          }
         },
       );
 
