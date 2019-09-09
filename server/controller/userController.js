@@ -65,6 +65,42 @@ class userController {
     }
 
   }
+
+  // SignIn
+  static async signIn(req, res) {
+    const {
+      email, password,
+    } = req.body;
+    const {rows} = await db.query('SELECT * FROM users WHERE email=$1', [email]);
+
+    if (!rows.length > 0) {
+      return res.status(404).json({
+        status: 404,
+        error: 'user not found',
+      });
+    }
+    const {
+      firstname, lastname, pass, address, status,
+    } = rows[0];
+    const jsToken = jwt.sign({
+      id: rows[0].id, email, firstname, lastname, pass, address, status,
+    }, process.env.API_SERCRET_KEY);
+    const comparePassword = hash.compareSync(password, rows[0].password);
+    if (!comparePassword) {
+      return res.status(400).json({
+        status: 400,
+        error: 'password not matching',
+      });
+    }
+    return res.status(200).json({
+      status: 200,
+      message: 'User is successfully logged in',
+      data: {
+        token: jsToken, id: rows[0].id, email: rows[0].email, status: rows[0].status,
+      },
+    });
+  }
 }
+
 
 export default userController;
