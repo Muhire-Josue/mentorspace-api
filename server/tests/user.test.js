@@ -38,7 +38,6 @@ describe('User tests', () => {
         res.body.data.should.have.property('firstname');
         res.body.data.should.have.property('lastname');
         res.body.data.should.have.property('email');
-        res.body.data.should.have.property('password');
         res.body.data.should.have.property('address');
         res.body.data.should.have.property('bio');
         res.body.data.should.have.property('occupation');
@@ -140,6 +139,69 @@ describe('User tests', () => {
         res.body.should.be.an('object');
         res.body.status.should.be.equal(401);
         res.body.error.should.be.a('string');
+        done();
+      });
+  });
+  // Sign In
+  it('Should be login', (done) => {
+    const user = {
+      email: 'olubunmi@yaw.com',
+      password: 'user4',
+    };
+
+    chai.request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((req, res) => {
+        res.body.status.should.be.equal(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('Should not SignIn non-existing email', (done) => {
+    const user = {
+      email: 'muhirejosue@gmail.com',
+      password: 'user1',
+    };
+    chai.request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((req, res) => {
+        res.body.status.should.be.equal(404);
+        done();
+      });
+  });
+
+
+  it('should not be able to signin when not signed up', (done) => {
+    const user = {
+      email: 'a@gmail.com',
+      password: 'bertin123',
+    };
+    chai.request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((err, res) => {
+        res.body.status.should.be.equal(404);
+        res.body.should.be.an('object');
+        res.body.error.should.be.equal('user not found');
+        done();
+      });
+  });
+
+  it('should not be able to signin when passwords are not matching', (done) => {
+    const user = {
+      email: 'olubunmi@yaw.com',
+      password: 'trash',
+    };
+    chai.request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((err, res) => {
+        res.body.status.should.be.equal(400);
+        res.body.should.be.an('object');
+        res.body.error.should.be.equal('password not matching');
         done();
       });
   });
