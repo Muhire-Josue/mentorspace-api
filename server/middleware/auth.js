@@ -12,6 +12,7 @@ const auth = (req, res, next) => {
             return res.status(401).json({
                 status: 401,
                 message: 'please login first or sign up',
+                error
             });
         } else {
             req.user = data;
