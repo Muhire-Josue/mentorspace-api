@@ -77,4 +77,33 @@ describe('Mentor tests', () => {
       });
   });
 
+  it('should allow to view a mentor', (done) => {
+    chai.request(server)
+      .get(`/api/v1/auth/mentors/${mentorUser.id}`)
+      .set('Authorization', `Bearer ${normalUserToken}`)
+      .end((error, res) => {
+        res.body.status.should.be.equal(200);
+        done();
+      });
+  });
+
+  it('should not allow to view non-mentors', (done) => {
+    chai.request(server)
+      .get(`/api/v1/auth/mentors/${normalUser.id}`)
+      .set('Authorization', `Bearer ${normalUserToken}`)
+      .end((error, res) => {
+        done();
+      });
+  });
+
+  it('should  not allow other users to view a mentor', (done) => {
+    chai.request(server)
+      .get(`/api/v1/auth/mentors/${mentorUser.id}`)
+      .set('Authorization', `Bearer ${mentorUserToken}`)
+      .end((error, res) => {
+        res.body.status.should.be.equal(401);
+        done();
+      });
+  });
+
 });

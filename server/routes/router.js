@@ -11,6 +11,7 @@ router.post('/api/v1/auth/signup', userController.signUp);
 router.post('/api/v1/auth/signin', userController.signIn);
 // Get all mentors
 router.get('/api/v1/mentors', auth, mentorController.all);
-
+// Get a mentor
+router.get('/api/v1/auth/mentors/:id', auth, mentorController.findMentorById);
 
 export default router;
