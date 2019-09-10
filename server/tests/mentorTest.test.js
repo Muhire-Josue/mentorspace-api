@@ -132,7 +132,7 @@ describe('Mentor tests', () => {
       .patch(`/api/v1/auth/sessions/${newSession.sessionId}/accept`)
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(400); 
+        res.body.status.should.be.equal(409); 
         res.body.should.be.an('object');
         done();
       });

@@ -71,8 +71,8 @@ class mentorController {
       if (rows[0]) {
         if (req.user.id === rows[0].mentorId) {
           if (rows[0].status === 'accept') {
-            return res.status(400).json({
-              status: 400,
+            return res.status(409).json({
+              status: 409,
               message: 'Session already accepted',
             });
           }
