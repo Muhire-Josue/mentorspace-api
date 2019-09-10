@@ -121,7 +121,7 @@ describe('Mentor tests', () => {
       .patch(`/api/v1/auth/sessions/${newSession.sessionId}/accept`)
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(200); 
+        res.body.status.should.be.equal(200);
         res.body.should.be.an('object');
         done();
       });
@@ -132,7 +132,7 @@ describe('Mentor tests', () => {
       .patch(`/api/v1/auth/sessions/${newSession.sessionId}/accept`)
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(409); 
+        res.body.status.should.be.equal(409);
         res.body.should.be.an('object');
         done();
       });
@@ -167,6 +167,49 @@ describe('Mentor tests', () => {
       .end((error, res) => {
         res.body.should.be.an('object');
         res.body.status.should.be.equal(401);
+        done();
+      });
+  });
+
+  it('should let mentor reject session request', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/auth/sessions/${newSession.sessionId}/reject`)
+      .set('Authorization', `Bearer ${mentorUserToken}`)
+      .end((error, res) => {
+        res.body.status.should.be.equal(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should not let mentor reject session twice', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/auth/sessions/${newSession.sessionId}/reject`)
+      .set('Authorization', `Bearer ${mentorUserToken}`)
+      .end((error, res) => {
+        res.body.status.should.be.equal(409);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should not let mentor reject  others session request', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/auth/sessions/${newSessionTwo.sessionId}/reject`)
+      .set('Authorization', `Bearer ${mentorUserToken}`)
+      .end((error, res) => {
+        res.body.should.be.an('object');
+        res.body.status.should.be.equal(401);
+        done();
+      });
+  });
+
+  it('should not let mentor reject  non-existing session request', (done) => {
+    chai.request(server)
+      .patch('/api/v1/auth/sessions/0/reject')
+      .set('Authorization', `Bearer ${mentorUserToken}`)
+      .end((error, res) => {
+        res.body.should.be.an('object');
         done();
       });
   });

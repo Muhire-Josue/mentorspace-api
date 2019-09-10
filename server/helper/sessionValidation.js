@@ -5,7 +5,7 @@ const sessionSchema = Joi.object().keys({
   mentorId: Joi.number().required(),
   menteeEmail: Joi.string().email().required(),
   questions: Joi.string().min(2).required(),
-  status: Joi.string().min(2).required(),
+  status: Joi.string().valid('accept', 'reject').required(),
 
 });
 
