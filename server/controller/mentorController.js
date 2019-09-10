@@ -78,10 +78,12 @@ class mentorController {
           }
             const text = `UPDATE sessions SET status=$1 WHERE "sessionId"=${id} RETURNING *`;
             const values = ['accept'];
-            await db.query(text, values);
+           const data =  await db.query(text, values);
+           
             return res.status(200).json({
               status: 200,
-              message: 'Session has been accepted'
+              message: 'Session has been accepted',
+              data: data.rows[0]
             });
           
         } else {
@@ -101,6 +103,51 @@ class mentorController {
         status: 401,
         error: 'Unauthorized access',
       });
+    }
+  }
+
+  static async rejectSession(req, res) {
+    try {
+      if (req.user.status === 'mentor') {
+        const id = req.params.sessionId;
+        const { rows } = await db.query('SELECT * FROM sessions WHERE "sessionId"=$1', [id]);
+        if (rows[0]) {
+          if (req.user.id === rows[0].mentorId) {
+            if (rows[0].status === 'reject') {
+              return res.status(409).json({
+                status: 409,
+                message: 'Session already rejected',
+              });
+            }
+            const text = `UPDATE sessions SET status=$1 WHERE "sessionId"=${id} RETURNING *`;
+            const values = ['reject'];
+            const data = await db.query(text, values);
+            res.status(200).json({
+              status: 200,
+              message: 'Session rejected successfully!',
+              data: data.rows[0]
+            });
+          } else {
+            res.status(401).json({
+              status: 401,
+              error: 'Unauthorized operation',
+            });
+          }
+        } else {
+          res.status(404).json({
+            error: 404,
+            message: 'User not found',
+          });
+        }
+      } else {
+        res.status(401).json({
+          status: 401,
+          error: 'Unauthorized access',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      
     }
   }
 }
