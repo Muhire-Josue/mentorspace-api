@@ -106,12 +106,67 @@ describe('Mentor tests', () => {
       });
   });
 
-  it('should allow to view a mentor', (done) => {
+  it('should not be able to view a mentor with invalid', (done) => {
     chai.request(server)
       .get(`/api/v1/auth/mentors/abc`)
       .set('Authorization', `Bearer ${normalUserToken}`)
       .end((error, res) => {
         res.body.status.should.be.equal(400);
+        done();
+      });
+  });
+
+  it('should let mentor accept session request', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/auth/sessions/${newSession.sessionId}/accept`)
+      .set('Authorization', `Bearer ${mentorUserToken}`)
+      .end((error, res) => {
+        res.body.status.should.be.equal(200); 
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should not let mentor accept session twice', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/auth/sessions/${newSession.sessionId}/accept`)
+      .set('Authorization', `Bearer ${mentorUserToken}`)
+      .end((error, res) => {
+        res.body.status.should.be.equal(409); 
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should not allow mentor accept other session request', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/auth/sessions/${newSessionTwo.sessionId}/accept`)
+      .set('Authorization', `Bearer ${mentorUserToken}`)
+      .end((error, res) => {
+        res.body.status.should.be.equal(401);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should not allow mentor accept non-existing session request', (done) => {
+    chai.request(server)
+      .patch('/api/v1/auth/sessions/5/accept')
+      .set('Authorization', `Bearer ${mentorUserToken}`)
+      .end((error, res) => {
+        res.body.status.should.be.equal(404);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should not let other users to accept session request', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/auth/sessions/${newSession.sessionId}/accept`)
+      .set('Authorization', `Bearer ${normalUserToken}`)
+      .end((error, res) => {
+        res.body.should.be.an('object');
+        res.body.status.should.be.equal(401);
         done();
       });
   });
