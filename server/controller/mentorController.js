@@ -78,10 +78,12 @@ class mentorController {
           }
             const text = `UPDATE sessions SET status=$1 WHERE "sessionId"=${id} RETURNING *`;
             const values = ['accept'];
-            await db.query(text, values);
+           const data =  await db.query(text, values);
+           
             return res.status(200).json({
               status: 200,
-              message: 'Session has been accepted'
+              message: 'Session has been accepted',
+              data: data.rows[0]
             });
           
         } else {
@@ -119,10 +121,11 @@ class mentorController {
             }
             const text = `UPDATE sessions SET status=$1 WHERE "sessionId"=${id} RETURNING *`;
             const values = ['reject'];
-            await db.query(text, values);
+            const data = await db.query(text, values);
             res.status(200).json({
               status: 200,
-              message: 'Session rejected successfully!'
+              message: 'Session rejected successfully!',
+              data: data.rows[0]
             });
           } else {
             res.status(401).json({
