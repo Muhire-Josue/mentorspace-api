@@ -6,12 +6,10 @@ import mentorController from '../controller/mentorController';
 
 const router = express.Router();
 
-// Sign up
-router.post('/api/v1/auth/signup', userController.signUp);
-// Sign in
-router.post('/api/v1/auth/signin', userController.signIn);
-//All mentors
-router.get('/api/v1/mentors', auth, mentorController.all);
 
+router.post('/api/v1/auth/signup', userController.signUp);
+router.post('/api/v1/auth/signin', userController.signIn);
+router.get('/api/v1/mentors', auth, mentorController.all);
+router.get('/api/v1/auth/mentors/:id', auth, mentorController.findMentorById);
 
 export default router;
