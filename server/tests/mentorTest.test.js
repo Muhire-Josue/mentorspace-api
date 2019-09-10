@@ -106,4 +106,14 @@ describe('Mentor tests', () => {
       });
   });
 
+  it('should allow to view a mentor', (done) => {
+    chai.request(server)
+      .get(`/api/v1/auth/mentors/abc`)
+      .set('Authorization', `Bearer ${normalUserToken}`)
+      .end((error, res) => {
+        res.body.status.should.be.equal(400);
+        done();
+      });
+  });
+
 });
