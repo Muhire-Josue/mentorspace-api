@@ -21,48 +21,87 @@ class mentorController {
     }
   }
 
-   static async findMentorById(req, res) {
-     try {
-       const pId = parseInt(req.params.id);
-       if (req.user.status === 'user') {
-         if(Number.isInteger(pId)){
-           const { rows } = await db.query('SELECT * FROM users WHERE status=\'mentor\' AND id=$1', [pId]);
-            if (rows.length > 0) {
-              res.status(200).json({
-                status: 200,
-                id: rows[0].id,
-                firstname: rows[0].firstname,
-                lastname: rows[0].lastname,
-                email: rows[0].email,
-                address: rows[0].address,
-                bio: rows[0].bio,
-                expertise: rows[0].expertise,
-                occupation: rows[0].occupation,
-                userStatus: rows[0].status
-              });
-            } else {
-              res.status(404).json({
-                status: 404,
-                error: 'Mentor not found',
-      
-              });
-            }
+  static async findMentorById(req, res) {
+    try {
+      const pId = parseInt(req.params.id);
+      if (req.user.status === 'user') {
+        if (Number.isInteger(pId)) {
+          const { rows } = await db.query('SELECT * FROM users WHERE status=\'mentor\' AND id=$1', [pId]);
+          if (rows.length > 0) {
+            res.status(200).json({
+              status: 200,
+              id: rows[0].id,
+              firstname: rows[0].firstname,
+              lastname: rows[0].lastname,
+              email: rows[0].email,
+              address: rows[0].address,
+              bio: rows[0].bio,
+              expertise: rows[0].expertise,
+              occupation: rows[0].occupation,
+              userStatus: rows[0].status
+            });
           } else {
-            res.status(400).json({
-              status: 400,
-              error: 'Please provide a valid ID',
+            res.status(404).json({
+              status: 404,
+              error: 'Mentor not found',
+
             });
           }
-         } else {
-          res.status(401).json({
-            status: 401,
-            error: 'Unauthorized access',
+        } else {
+          res.status(400).json({
+            status: 400,
+            error: 'Please provide a valid ID',
           });
         }
-     } catch (error) {
-       console.log(error);
-       
-     }
+      } else {
+        res.status(401).json({
+          status: 401,
+          error: 'Unauthorized access',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+  static async acceptSession(req, res) {
+    if (req.user.status === 'mentor') {
+      const id = req.params.sessionId;
+      const { rows } = await db.query('SELECT * FROM sessions WHERE "sessionId"=$1', [id]);
+      if (rows[0]) {
+        if (req.user.id === rows[0].mentorId) {
+          if (rows[0].status === 'accept') {
+            return res.status(400).json({
+              status: 400,
+              message: 'Session already accepted',
+            });
+          }
+            const text = `UPDATE sessions SET status=$1 WHERE "sessionId"=${id} RETURNING *`;
+            const values = ['accept'];
+            await db.query(text, values);
+            return res.status(200).json({
+              status: 200,
+              message: 'Session has been accepted'
+            });
+          
+        } else {
+          res.status(401).json({
+            status: 401,
+            error: 'Unauthorized operation',
+          });
+        }
+      } else {
+        return res.status(404).json({
+          status: 404,
+          message: 'Session not found',
+        });
+      }
+    } else {
+      return res.status(400).json({
+        status: 401,
+        error: 'Unauthorized access',
+      });
+    }
   }
 }
 
