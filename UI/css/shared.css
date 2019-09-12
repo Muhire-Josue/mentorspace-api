@@ -29,11 +29,12 @@ body, html {
   
   /* Add styles to the form container */
   .container {
-    position: absolute;
+    /* position: absolute; */
     right: 0;
     margin: 20px;
     margin-top: 2rem;
-    max-width: 300px;
+    /* max-width: 300px; */
+    width: 25%;
     padding: 16px;
     background-color: white;
     bottom: 25%;

@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/shared.css">
 </head>
 
 <body>
@@ -65,48 +66,50 @@
             </li>
         </ul>
     </nav>
-    <center>
+    <section>
+        <center>
+            <section class="profile">
+            </section>
+            <h3 id="mentor-title">Dmitri Sergeyevich</h3>
+            <div class="mentor-info">
+                <table>
+                    <td><span>First Name: </span></td>
+                    <td>Dmitri</td>
+                    </tr>
+                    <tr>
+                        <td><span>Last Name: </span></td>
+                        <td>Sergeyevich</td>
+                    </tr>
+                    <tr>
+                        <td><span>Email: </span></td>
+                        <td>Sergeyevich@example.com</td>
+                    </tr>
+                    <tr>
+                        <td><span>Address: </span></td>
+                        <td>St Petersburg</td>
+                    </tr>
+                    <tr>
+                        <td><span>Expertise: </span></td>
+                        <td>Backend</td>
+                    </tr>
+                    <tr>
+                        <td><span>Bio: </span></td>
+                        <td>EX google developer</td>
+                    </tr>
+                    <tr>
+                        <td><span>Occupation: </span></td>
+                        <td> Software engineer</td>
+                    </tr>
+                </table>
+    
+            </div>
+            <div class="session-request">
+                 <input type="submit" value="REQUEST SESSION" onclick="alert('Session request created successfully!');" class="button" />
+            </div>
+    
+        </center>
 
-        <section class="profile">
-        </section>
-        <h3 id="mentor-title">Dmitri Sergeyevich</h3>
-        <div class="mentor-info">
-            <table>
-                <td><span>First Name: </span></td>
-                <td>Dmitri</td>
-                </tr>
-                <tr>
-                    <td><span>Last Name: </span></td>
-                    <td>Sergeyevich</td>
-                </tr>
-                <tr>
-                    <td><span>Email: </span></td>
-                    <td>Sergeyevich@example.com</td>
-                </tr>
-                <tr>
-                    <td><span>Address: </span></td>
-                    <td>St Petersburg</td>
-                </tr>
-                <tr>
-                    <td><span>Expertise: </span></td>
-                    <td>Backend</td>
-                </tr>
-                <tr>
-                    <td><span>Bio: </span></td>
-                    <td>EX google developer</td>
-                </tr>
-                <tr>
-                    <td><span>Occupation: </span></td>
-                    <td> Software engineer</td>
-                </tr>
-            </table>
-
-        </div>
-        <div class="session-request">
-             <input type="submit" value="REQUEST SESSION" onclick="alert('Session request created successfully!');" class="button" />
-        </div>
-
-    </center>
+    </section>
 
     <br /><br />
     <footer class="main-footer">
@@ -123,6 +126,8 @@
     </footer>
     <script src="js/shared.js"></script>
     <script src="js/notification-alert.js"></script>
+    <script src="js/index.js"></script>
+
 </body>
 
 </html>
