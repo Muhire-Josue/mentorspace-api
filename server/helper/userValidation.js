@@ -1,4 +1,3 @@
-/* eslint-disable newline-per-chained-call */
 import Joi from '@hapi/joi';
 
 const userSchema = Joi.object().keys({

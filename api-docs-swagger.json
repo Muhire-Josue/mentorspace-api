@@ -1,0 +1,436 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Mentorspace is a light-weight web application that helps Users to create mentorship session requests with available mentors, and for mentors to choose which session they want to have with specific users.",
+    "version": "1.0.0",
+    "title": "Mentorspace",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "rutayisire.josue09@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "mentorspace-api.herokuapp.com:3000",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Everything about authentication"
+    },
+    {
+      "name": "mentors"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Create a new user",
+        "description": "",
+        "operationId": "addUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object that needs to be created",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "firstname",
+                "lastname",
+                "email",
+                "password",
+                "address",
+                "expertise",
+                "bio",
+                "occupation",
+                "status"
+              ],
+              "properties": {
+                "firstname": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "lastname": {
+                  "type": "string",
+                  "example": "Smith"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "doe123!@"
+                },
+                "address": {
+                  "type": "string",
+                  "example": "Kigali"
+                },
+                "expertise": {
+                  "type": "string",
+                  "example": "HR manager"
+                },
+                "bio": {
+                  "type": "string",
+                  "example": "HR diractor"
+                },
+                "occupation": {
+                  "type": "string",
+                  "example": "Full time manager"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "user"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Account created"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "409": {
+            "description": "email already exists"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Login user",
+        "description": "",
+        "operationId": "signinUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object that needs to be logged in",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "john@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "doe123!@"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged in"
+          },
+          "400": {
+            "description": "Password dont match"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/auth/sessions": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Create Session request",
+        "description": "",
+        "operationId": "createSession",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object to create a session request ",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "mentorId",
+                "questions"
+              ],
+              "properties": {
+                "mentorId": {
+                  "type": "integer",
+                  "example": 4
+                },
+                "questions": {
+                  "type": "string",
+                  "example": "Can we have a session this week"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session created successfully!"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized access"
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/mentors": {
+      "get": {
+        "tags": [
+          "mentors"
+        ],
+        "summary": "Get all mentors",
+        "description": "Returns an array of mentors",
+        "operationId": "getAllMentors",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/auth/mentors/{id}": {
+      "get": {
+        "tags": [
+          "mentors"
+        ],
+        "summary": "Get a mentor",
+        "description": "Returns a mentor",
+        "operationId": "getAMentor",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of mentor to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/auth/sessions/{sessionId}/accept": {
+      "patch": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Get a mentor",
+        "description": "Returns a mentor",
+        "operationId": "acceptSession",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "description": "ID of a session to be accepted",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session has been accepted"
+          },
+          "401": {
+            "description": "Unauthorized access"
+          },
+          "404": {
+            "description": "Session not found"
+          },
+          "409": {
+            "description": "Session already accepted"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/auth/sessions/{sessionId}/reject": {
+      "patch": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "reject a session request",
+        "description": "rejects session requests",
+        "operationId": "rejectSession",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "description": "ID of a session to be accepted",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session has been accepted"
+          },
+          "401": {
+            "description": "Unauthorized access"
+          },
+          "404": {
+            "description": "Session not found"
+          },
+          "409": {
+            "description": "Session already accepted"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/auth/user/{id}": {
+      "patch": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "admin change user to mentor",
+        "description": "admin can change user to mentor",
+        "operationId": "changeUserToMentor",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of a session to be accepted",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User account changed to mentor Sucessfully"
+          },
+          "401": {
+            "description": "Unauthorized access"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "409": {
+            "description": "User is already a mentor"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "authorization",
+      "in": "header"
+    }
+  }
+}

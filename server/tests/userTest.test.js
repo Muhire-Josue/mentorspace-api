@@ -32,7 +32,7 @@ describe('User tests', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((error, res) => {
-        res.body.status.should.be.equal(201);
+        res.body.status_code.should.be.equal(201);
         res.body.should.be.an('object');
         res.body.data.should.have.property('firstname');
         res.body.data.should.have.property('lastname');
@@ -61,7 +61,7 @@ describe('User tests', () => {
       .send(user)
       .end((req, res) => {
         res.body.should.be.an('object');
-        res.body.status.should.be.equal(400);
+        res.body.status_code.should.be.equal(400);
         res.body.error.should.be.a('string');
         done();
       });
@@ -85,7 +85,7 @@ describe('User tests', () => {
       .send(user)
       .end((req, res) => {
         res.body.should.be.an('object');
-        res.body.status.should.be.equal(400);
+        res.body.status_code.should.be.equal(400);
         res.body.error.should.be.a('string');
         done();
       });
@@ -113,8 +113,7 @@ describe('User tests', () => {
       .send(user)
       .end((req, res) => {
         res.body.should.be.an('object');
-        res.body.status.should.be.equal(401);
-        res.body.error.should.be.a('string');
+        res.body.status_code.should.be.equal(409);
         done();
       });
   });
@@ -129,7 +128,7 @@ describe('User tests', () => {
       .post('/api/v1/auth/signin')
       .send(user)
       .end((req, res) => {
-        res.body.status.should.be.equal(200);
+        res.body.status_code.should.be.equal(200);
         res.body.should.be.an('object');
         done();
       });
@@ -144,7 +143,7 @@ describe('User tests', () => {
       .post('/api/v1/auth/signin')
       .send(user)
       .end((req, res) => {
-        res.body.status.should.be.equal(404);
+        res.body.status_code.should.be.equal(404);
         done();
       });
   });
@@ -159,7 +158,7 @@ describe('User tests', () => {
       .post('/api/v1/auth/signin')
       .send(user)
       .end((err, res) => {
-        res.body.status.should.be.equal(404);
+        res.body.status_code.should.be.equal(404);
         res.body.should.be.an('object');
         res.body.error.should.be.equal('user not found');
         done();
@@ -175,7 +174,7 @@ describe('User tests', () => {
       .post('/api/v1/auth/signin')
       .send(user)
       .end((err, res) => {
-        res.body.status.should.be.equal(400);
+        res.body.status_code.should.be.equal(400);
         res.body.should.be.an('object');
         res.body.error.should.be.equal('password not matching');
         done();
