@@ -33,15 +33,6 @@ describe('User tests', () => {
       .send(user)
       .end((error, res) => {
         res.body.status_code.should.be.equal(201);
-        res.body.should.be.an('object');
-        res.body.data.should.have.property('firstname');
-        res.body.data.should.have.property('lastname');
-        res.body.data.should.have.property('email');
-        res.body.data.should.have.property('address');
-        res.body.data.should.have.property('bio');
-        res.body.data.should.have.property('occupation');
-        res.body.data.should.have.property('expertise');
-        res.body.data.should.have.property('status');
         done();
       });
   });
