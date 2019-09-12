@@ -13,7 +13,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "mentorspace-api.herokuapp.com:3000",
+  "host": "mentorspace-api.herokuapp.com",
   "basePath": "/api/v1",
   "tags": [
     {
