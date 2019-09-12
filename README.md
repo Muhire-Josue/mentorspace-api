@@ -8,6 +8,7 @@ available mentors, and for mentors to choose which session they want to have wit
 ### Links
 ##### gh-pages:  https://muhire-josue.github.io/mentorspace-app/UI
 ##### Heroku: https://mentorspace-api.herokuapp.com
+##### API Documentation: https://mentorspace-api.herokuapp.com/api/v1/docs/
 
 ### Requirements
 
