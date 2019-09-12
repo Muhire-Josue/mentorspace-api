@@ -54,15 +54,32 @@ describe('Session tests', () => {
   it('should allow users to create session request', (done) => {
     const session = {
       mentorId: mentorUser.id,
-      questions: 'Hello world',
+      questions: 'Hello',
     };
 
     chai.request(server)
       .post('/api/v1/auth/sessions')
       .send(session)
       .set('Authorization', `Bearer ${normalUserToken}`)
-      .end((err, res) => {       
-        res.status.should.be.equal(201);
+      .end((err, res) => {              
+        res.body.status_code.should.be.equal(201);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should not create session request twice', (done) => {
+    const session = {
+      mentorId: mentorUser.id,
+      questions: 'Hello',
+    };
+
+    chai.request(server)
+      .post('/api/v1/auth/sessions')
+      .send(session)
+      .set('Authorization', `Bearer ${normalUserToken}`)
+      .end((err, res) => {              
+        res.body.status_code.should.be.equal(409);
         res.body.should.be.an('object');
         done();
       });
@@ -80,7 +97,7 @@ describe('Session tests', () => {
       .send(session)
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((err, res) => {
-        res.body.status.should.be.equal(401);
+        res.body.status_code.should.be.equal(401);
         res.body.should.be.an('object');
         done();
       });
@@ -96,7 +113,7 @@ describe('Session tests', () => {
       .send(session)
       .set('Authorization', `Bearer ${normalUserToken}`)
       .end((err, res) => {
-        res.body.status.should.be.equal(403);
+        res.body.status_code.should.be.equal(403);
         res.body.should.be.an('object');
         done();
       });
@@ -115,7 +132,7 @@ describe('Session tests', () => {
       .set('Authorization', `Bearer ${normalUserToken}`)
       .end((err, res) => {    
         res.body.should.be.an('object');
-        res.body.status.should.be.equal(400);
+        res.body.status_code.should.be.equal(400);
         done();
       });
   });
@@ -124,7 +141,7 @@ describe('Session tests', () => {
       .post('/api/v1/auth/sessions')
       .set('Authorization', 'Invalid token')
       .end((error, res) => {
-        res.body.status.should.be.equal(401);
+        res.body.status_code.should.be.equal(401);
         res.body.should.be.an('object');
         done();
       });

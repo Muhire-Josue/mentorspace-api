@@ -61,7 +61,7 @@ describe('Mentor tests', () => {
       .get('/api/v1/mentors')
       .set('Authorization', `Bearer ${normalUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(200);
+        res.body.status_code.should.be.equal(200);
         done();
       });
   });
@@ -72,7 +72,7 @@ describe('Mentor tests', () => {
       .get('/api/v1/mentors')
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(401);
+        res.body.status_code.should.be.equal(401);
         done();
       });
   });
@@ -82,7 +82,7 @@ describe('Mentor tests', () => {
       .get(`/api/v1/auth/mentors/${mentorUser.id}`)
       .set('Authorization', `Bearer ${normalUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(200);
+        res.body.status_code.should.be.equal(200);
         done();
       });
   });
@@ -92,6 +92,7 @@ describe('Mentor tests', () => {
       .get(`/api/v1/auth/mentors/${normalUser.id}`)
       .set('Authorization', `Bearer ${normalUserToken}`)
       .end((error, res) => {
+        res.body.status_code.should.be.equal(404);
         done();
       });
   });
@@ -101,7 +102,7 @@ describe('Mentor tests', () => {
       .get(`/api/v1/auth/mentors/${mentorUser.id}`)
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(401);
+        res.body.status_code.should.be.equal(401);
         done();
       });
   });
@@ -111,7 +112,7 @@ describe('Mentor tests', () => {
       .get(`/api/v1/auth/mentors/abc`)
       .set('Authorization', `Bearer ${normalUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(400);
+        res.body.status_code.should.be.equal(400);
         done();
       });
   });
@@ -121,7 +122,18 @@ describe('Mentor tests', () => {
       .patch(`/api/v1/auth/sessions/${newSession.sessionId}/accept`)
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(200);
+        res.body.status_code.should.be.equal(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should decline invalid sessionId', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/auth/sessions/abc/accept`)
+      .set('Authorization', `Bearer ${mentorUserToken}`)
+      .end((error, res) => {
+        res.body.status_code.should.be.equal(400);
         res.body.should.be.an('object');
         done();
       });
@@ -132,7 +144,7 @@ describe('Mentor tests', () => {
       .patch(`/api/v1/auth/sessions/${newSession.sessionId}/accept`)
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(409);
+        res.body.status_code.should.be.equal(409);
         res.body.should.be.an('object');
         done();
       });
@@ -143,7 +155,7 @@ describe('Mentor tests', () => {
       .patch(`/api/v1/auth/sessions/${newSessionTwo.sessionId}/accept`)
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(401);
+        res.body.status_code.should.be.equal(401);
         res.body.should.be.an('object');
         done();
       });
@@ -154,7 +166,7 @@ describe('Mentor tests', () => {
       .patch('/api/v1/auth/sessions/5/accept')
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(404);
+        res.body.status_code.should.be.equal(404);
         res.body.should.be.an('object');
         done();
       });
@@ -166,7 +178,7 @@ describe('Mentor tests', () => {
       .set('Authorization', `Bearer ${normalUserToken}`)
       .end((error, res) => {
         res.body.should.be.an('object');
-        res.body.status.should.be.equal(401);
+        res.body.status_code.should.be.equal(401);
         done();
       });
   });
@@ -176,7 +188,18 @@ describe('Mentor tests', () => {
       .patch(`/api/v1/auth/sessions/${newSession.sessionId}/reject`)
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(200);
+        res.body.status_code.should.be.equal(200);
+        res.body.should.be.an('object');
+        done();
+      });
+  });
+
+  it('should let mentor reject session request', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/auth/sessions/abc/reject`)
+      .set('Authorization', `Bearer ${mentorUserToken}`)
+      .end((error, res) => {
+        res.body.status_code.should.be.equal(400);
         res.body.should.be.an('object');
         done();
       });
@@ -187,7 +210,7 @@ describe('Mentor tests', () => {
       .patch(`/api/v1/auth/sessions/${newSession.sessionId}/reject`)
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(409);
+        res.body.status_code.should.be.equal(409);
         res.body.should.be.an('object');
         done();
       });
@@ -199,7 +222,7 @@ describe('Mentor tests', () => {
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
         res.body.should.be.an('object');
-        res.body.status.should.be.equal(401);
+        res.body.status_code.should.be.equal(401);
         done();
       });
   });
@@ -210,6 +233,7 @@ describe('Mentor tests', () => {
       .set('Authorization', `Bearer ${mentorUserToken}`)
       .end((error, res) => {
         res.body.should.be.an('object');
+        res.body.status_code.should.be.equal(404);
         done();
       });
   });

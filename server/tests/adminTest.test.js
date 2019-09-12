@@ -57,7 +57,17 @@ describe('Admin tests', () => {
       .patch(`/api/v1/auth/user/${normalUser.id}`)
       .set('Authorization', `Bearer ${adminUserToken}`)
       .end((error, res) => {        
-        res.body.status.should.be.equal(200);
+        res.body.status_code.should.be.equal(200);
+        done();
+      });
+  });
+
+  it('should decline invalid id', (done) => {
+    chai.request(server)
+      .patch(`/api/v1/auth/user/abc`)
+      .set('Authorization', `Bearer ${adminUserToken}`)
+      .end((error, res) => {        
+        res.body.status_code.should.be.equal(400);
         done();
       });
   });
@@ -67,7 +77,7 @@ describe('Admin tests', () => {
       .patch(`/api/v1/auth/user/10`)
       .set('Authorization', `Bearer ${adminUserToken}`)
       .end((error, res) => {        
-        res.body.status.should.be.equal(404);
+        res.body.status_code.should.be.equal(404);
         done();
       });
   });
@@ -77,7 +87,7 @@ describe('Admin tests', () => {
       .patch(`/api/v1/auth/user/${mentorUser.id}`)
       .set('Authorization', `Bearer ${adminUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(400);
+        res.body.status_code.should.be.equal(409);
         done();
       });
   });
@@ -87,7 +97,7 @@ describe('Admin tests', () => {
     .patch(`/api/v1/auth/user/${normalUser.id}`)
     .set('Authorization', `Bearer ${normalUserToken}`)
       .end((error, res) => {
-        res.body.status.should.be.equal(401);
+        res.body.status_code.should.be.equal(401);
         done();
       });
   });
