@@ -23,7 +23,7 @@ First clone it to your machine:
 https://github.com/Muhire-Josue/mentorspace-app.git
 ```
 
-Open it using your favorite IDE
+Open it using your favorite IDE,
 I used ([vs code](https://code.visualstudio.com/download))
 
 Install all necessary node modules
@@ -32,7 +32,7 @@ npm install
 ```
 To start the app
 ```
-npm start
+npm run start:dev
 ```
 To run tests
 ```
